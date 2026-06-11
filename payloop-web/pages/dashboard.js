@@ -58,13 +58,13 @@ export default function Dashboard() {
   const [contributionAmountInput, setContributionAmountInput] = useState("0.1");
   const [isContributing, setIsContributing] = useState(false);
 
-  // Load contract addresses from local storage on mount
+  // Load contract addresses from local storage or environment variables on mount
   useEffect(() => {
     setMounted(true);
-    setVaultAddress(localStorage.getItem("payloop_vault") || "");
-    setLendingAddress(localStorage.getItem("payloop_lending") || "");
-    setScoreAddress(localStorage.getItem("payloop_score") || "");
-    setTokenAddress(localStorage.getItem("payloop_token") || "");
+    setVaultAddress(localStorage.getItem("payloop_vault") || process.env.NEXT_PUBLIC_VAULT_CONTRACT_ADDRESS || "");
+    setLendingAddress(localStorage.getItem("payloop_lending") || process.env.NEXT_PUBLIC_LENDING_CONTRACT_ADDRESS || "");
+    setScoreAddress(localStorage.getItem("payloop_score") || process.env.NEXT_PUBLIC_SCORE_CONTRACT_ADDRESS || "");
+    setTokenAddress(localStorage.getItem("payloop_token") || process.env.NEXT_PUBLIC_TOKEN_CONTRACT_ADDRESS || "");
     if (address) {
       setAdminAddressesText(address);
     }

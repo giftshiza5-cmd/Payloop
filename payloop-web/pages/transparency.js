@@ -15,8 +15,8 @@ export default function Transparency() {
 
   useEffect(() => {
     setMounted(true);
-    // Auto-load if address is in query or localstorage
-    const saved = localStorage.getItem("payloop_vault");
+    // Auto-load if address is in query or localstorage or environment variables
+    const saved = localStorage.getItem("payloop_vault") || process.env.NEXT_PUBLIC_VAULT_CONTRACT_ADDRESS;
     if (saved) {
       setSearchAddress(saved);
       fetchCircleDetails(saved);
