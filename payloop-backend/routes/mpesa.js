@@ -1,7 +1,8 @@
 const express = require("express");
 const axios = require("axios");
 const { ethers } = require("ethers");
-const { getDb, sendPushNotification } = require("../services/firebase");
+const db = require("../services/db");
+const { sendPushNotification } = require("../services/firebase");
 const router = express.Router();
 
 // Exchange Rate: 1 KES = 0.01 MATIC (simulated exchange rate for chama micro-contributions)
@@ -47,18 +48,26 @@ router.post("/stkpush", async (req, res) => {
     return res.status(400).json({ error: "Missing required parameters (phone, amount, walletAddress, vaultAddress)" });
   }
 
+  const amt = parseFloat(amount);
+  if (isNaN(amt) || amt <= 0) {
+    return res.status(400).json({ error: "Invalid payment amount" });
+  }
+
   console.log(`Initiating STK Push for ${phone}, amount: KES ${amount}`);
 
-  // Save the pending transaction details in Firestore/Memory
-  const db = getDb();
-  await db.collection("pendingPayments").doc(phone).set({
-    walletAddress,
-    vaultAddress,
-    amount: parseFloat(amount),
-    timestamp: new Date()
-  });
-
   try {
+    // 1. Save the pending transaction details in PostgreSQL
+    const upsertQuery = `
+      INSERT INTO pending_payments (phone, wallet_address, vault_address, amount, timestamp)
+      VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP)
+      ON CONFLICT (phone) DO UPDATE 
+      SET wallet_address = EXCLUDED.wallet_address,
+          vault_address = EXCLUDED.vault_address,
+          amount = EXCLUDED.amount,
+          timestamp = CURRENT_TIMESTAMP
+    `;
+    await db.query(upsertQuery, [phone, walletAddress, vaultAddress, amt]);
+
     const token = await getMpesaToken();
     
     // If running in Mock Mode (no actual M-Pesa credentials configured)
@@ -93,7 +102,7 @@ router.post("/stkpush", async (req, res) => {
         Password: password,
         Timestamp: timestamp,
         TransactionType: "CustomerPayBillOnline",
-        Amount: amount,
+        Amount: amt,
         PartyA: phone,
         PartyB: shortCode,
         PhoneNumber: phone,
@@ -164,17 +173,17 @@ router.post("/simulate-callback", async (req, res) => {
 
 // Helper to execute the on-chain write transaction via relayer wallet
 async function processOnChainDeposit(phone, amountKes, transactionCode) {
-  const db = getDb();
-  
-  // Retrieve the pending payment details
-  const pendingDoc = await db.collection("pendingPayments").doc(phone).get();
-  if (!pendingDoc.exists) {
+  // 1. Retrieve the pending payment details from PostgreSQL
+  const selectQuery = "SELECT * FROM pending_payments WHERE phone = $1";
+  const pendingRes = await db.query(selectQuery, [phone]);
+
+  if (pendingRes.rowCount === 0) {
     console.error(`No pending payment metadata found for phone: ${phone}`);
     return;
   }
 
-  const { walletAddress, vaultAddress } = pendingDoc.data();
-  console.log(`Retrieved payment metadata. Wallet: ${walletAddress}, Vault: ${vaultAddress}`);
+  const { wallet_address, vault_address } = pendingRes.rows[0];
+  console.log(`Retrieved payment metadata. Wallet: ${wallet_address}, Vault: ${vault_address}`);
 
   // Calculate MATIC to deposit (1 KES = 0.01 MATIC)
   const maticAmount = amountKes * KES_TO_MATIC_RATE;
@@ -192,10 +201,10 @@ async function processOnChainDeposit(phone, amountKes, transactionCode) {
     
     console.log(`Relayer wallet address: ${relayerWallet.address}`);
 
-    const vaultContract = new ethers.Contract(vaultAddress, VAULT_ABI, relayerWallet);
+    const vaultContract = new ethers.Contract(vault_address, VAULT_ABI, relayerWallet);
 
     console.log(`Sending contributeOnBehalf write transaction...`);
-    const tx = await vaultContract.contributeOnBehalf(walletAddress, {
+    const tx = await vaultContract.contributeOnBehalf(wallet_address, {
       value: maticWei,
       gasLimit: 300000
     });
@@ -211,8 +220,10 @@ async function processOnChainDeposit(phone, amountKes, transactionCode) {
       `M-Pesa payment of KES ${amountKes} converted to ${maticAmount} MATIC has been successfully saved in the vault!`
     );
 
-    // Delete pending payment
-    // in mock it's fine
+    // 2. Delete pending payment record
+    const deleteQuery = "DELETE FROM pending_payments WHERE phone = $1";
+    await db.query(deleteQuery, [phone]);
+
   } catch (error) {
     console.error("Relaying on-chain transaction failed:", error);
     throw error;

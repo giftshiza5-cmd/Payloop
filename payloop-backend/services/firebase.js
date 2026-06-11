@@ -28,6 +28,21 @@ const memoryDb = {
     }
     const col = this.store[colName];
     return {
+      async get() {
+        const docs = Object.keys(col)
+          .filter(id => col[id].exists)
+          .map(id => ({
+            id,
+            data: () => col[id].data,
+            exists: col[id].exists
+          }));
+        return {
+          docs,
+          forEach(callback) {
+            docs.forEach(callback);
+          }
+        };
+      },
       doc(docId) {
         if (!col[docId]) {
           col[docId] = { exists: false, data: {} };
