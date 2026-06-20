@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
   // SPLASH SCREEN
   splashContainer: {
     flex: 1,
-    backgroundColor: "#00875A",
+    backgroundColor: "#0F9D58",
     alignItems: "center",
     justifyContent: "space-between",
     paddingVertical: 50
@@ -79,7 +79,7 @@ export const styles = StyleSheet.create({
     width: 260,
     height: 260,
     borderRadius: 130,
-    backgroundColor: "rgba(0, 135, 90, 0.08)",
+    backgroundColor: "rgba(15, 157, 88, 0.08)",
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 24
@@ -95,7 +95,7 @@ export const styles = StyleSheet.create({
   onboardingLabel: {
     fontSize: 11,
     fontWeight: "800",
-    color: "#00875A",
+    color: "#0F9D58",
     textTransform: "uppercase",
     letterSpacing: 1,
     marginBottom: 10
@@ -125,7 +125,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "#E5E7EB"
   },
   indicatorDotActive: {
-    backgroundColor: "#00875A",
+    backgroundColor: "#0F9D58",
     width: 16
   },
   onboardingActionRow: {
@@ -150,7 +150,7 @@ export const styles = StyleSheet.create({
   },
   onboardingNextBtn: {
     flex: 1,
-    backgroundColor: "#00875A",
+    backgroundColor: "#0F9D58",
     borderRadius: 12,
     paddingVertical: 14,
     alignItems: "center"
@@ -170,7 +170,7 @@ export const styles = StyleSheet.create({
     width: 70,
     height: 70,
     borderRadius: 18,
-    backgroundColor: "rgba(0,135,90,0.08)",
+    backgroundColor: "rgba(15, 157, 88,0.08)",
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 16
@@ -207,7 +207,7 @@ export const styles = StyleSheet.create({
   },
   buttonWelcomeCreate: {
     width: "100%",
-    backgroundColor: "#00875A",
+    backgroundColor: "#0F9D58",
     borderRadius: 14,
     paddingVertical: 16,
     alignItems: "center",
@@ -217,7 +217,7 @@ export const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "#ffffff",
     borderWidth: 1.5,
-    borderColor: "#00875A",
+    borderColor: "#0F9D58",
     borderRadius: 14,
     paddingVertical: 16,
     alignItems: "center",
@@ -226,7 +226,7 @@ export const styles = StyleSheet.create({
   buttonWelcomeLoginText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#00875A"
+    color: "#0F9D58"
   },
 
   // REGISTRATION PAGE
@@ -314,7 +314,7 @@ export const styles = StyleSheet.create({
   },
   verificationEmailHighlight: {
     fontWeight: "bold",
-    color: "#00875A"
+    color: "#0F9D58"
   },
   verificationInputWrapper: {
     width: "100%",
@@ -346,7 +346,7 @@ export const styles = StyleSheet.create({
   },
   otpTimerLinkText: {
     fontSize: 13,
-    color: "#00875A",
+    color: "#0F9D58",
     fontWeight: "700"
   },
   otpTimerLinkDisabled: {
@@ -389,7 +389,7 @@ export const styles = StyleSheet.create({
   },
   skipWalletBtnText: {
     fontSize: 15,
-    color: "#00875A",
+    color: "#0F9D58",
     fontWeight: "bold"
   },
 
@@ -414,7 +414,7 @@ export const styles = StyleSheet.create({
   avatarMockLabel: {
     fontSize: 12,
     fontWeight: "600",
-    color: "#00875A",
+    color: "#0F9D58",
     marginTop: 8
   },
 
@@ -448,7 +448,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "#E5E7EB"
   },
   pinDotFilled: {
-    backgroundColor: "#00875A"
+    backgroundColor: "#0F9D58"
   },
   keypadContainer: {
     width: "100%",
@@ -482,7 +482,7 @@ export const styles = StyleSheet.create({
   },
   forgotPinText: {
     fontSize: 14,
-    color: "#00875A",
+    color: "#0F9D58",
     fontWeight: "600"
   },
 
@@ -534,13 +534,13 @@ export const styles = StyleSheet.create({
   headerActionButtonText: {
     fontSize: 14,
     fontWeight: "bold",
-    color: "#00875A"
+    color: "#0F9D58"
   },
   headerActionButtonSave: {
     fontSize: 14,
     fontWeight: "bold",
     color: "#ffffff",
-    backgroundColor: "#00875A",
+    backgroundColor: "#0F9D58",
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 6
@@ -562,9 +562,9 @@ export const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: "rgba(0, 135, 90, 0.08)",
+    backgroundColor: "rgba(15, 157, 88, 0.08)",
     borderWidth: 1.5,
-    borderColor: "#00875A",
+    borderColor: "#0F9D58",
     alignItems: "center",
     justifyContent: "center",
     marginRight: 12
@@ -657,7 +657,7 @@ export const styles = StyleSheet.create({
     color: "#6B7280"
   },
   currencyPillLabelActiveText: {
-    color: "#00875A"
+    color: "#0F9D58"
   },
 
   // ANNOUNCEMENTS MARQUEE CARD
@@ -723,7 +723,7 @@ export const styles = StyleSheet.create({
   savingsCardGrowthText: {
     fontSize: 11,
     fontWeight: "bold",
-    color: "#00875A",
+    color: "#0F9D58",
     marginTop: 6
   },
   sparklineContainer: {
@@ -874,7 +874,11 @@ export const styles = StyleSheet.create({
     opacity: 0.4
   },
   tabBarIconActive: {
-    opacity: 1
+    opacity: 1,
+    fontSize: 23,
+    textShadowColor: "rgba(15, 157, 88, 0.6)",
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 8
   },
   tabBarLabel: {
     fontSize: 11,
@@ -883,7 +887,7 @@ export const styles = StyleSheet.create({
     fontWeight: "500"
   },
   tabBarLabelActive: {
-    color: "#00875A",
+    color: "#0F9D58",
     fontWeight: "700"
   },
 
@@ -997,11 +1001,11 @@ export const styles = StyleSheet.create({
   contribAmount: {
     fontSize: 14,
     fontWeight: "bold",
-    color: "#00875A"
+    color: "#0F9D58"
   },
   buttonForestGreenBigSubmitSavings: {
     width: "100%",
-    backgroundColor: "#00875A",
+    backgroundColor: "#0F9D58",
     borderRadius: 14,
     paddingVertical: 16,
     alignItems: "center",
@@ -1057,7 +1061,7 @@ export const styles = StyleSheet.create({
     alignItems: "center"
   },
   quickAmtBtnActive: {
-    backgroundColor: "#00875A"
+    backgroundColor: "#0F9D58"
   },
   quickAmtBtnText: {
     fontSize: 13,
@@ -1080,7 +1084,7 @@ export const styles = StyleSheet.create({
     marginTop: 10
   },
   paymentMethodActiveCard: {
-    borderColor: "#00875A"
+    borderColor: "#0F9D58"
   },
   paymentMethodLeft: {
     flexDirection: "row",
@@ -1091,7 +1095,7 @@ export const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 8,
-    backgroundColor: "rgba(0,135,90,0.08)",
+    backgroundColor: "rgba(15, 157, 88,0.08)",
     alignItems: "center",
     justifyContent: "center"
   },
@@ -1127,8 +1131,8 @@ export const styles = StyleSheet.create({
     borderColor: "#D1D5DB"
   },
   paymentMethodChecked: {
-    borderColor: "#00875A",
-    backgroundColor: "#00875A"
+    borderColor: "#0F9D58",
+    backgroundColor: "#0F9D58"
   },
   walletBalanceSummaryBox: {
     flexDirection: "row",
@@ -1149,7 +1153,7 @@ export const styles = StyleSheet.create({
   },
   buttonForestGreenSubmitContribution: {
     width: "100%",
-    backgroundColor: "#00875A",
+    backgroundColor: "#0F9D58",
     borderRadius: 14,
     paddingVertical: 16,
     alignItems: "center",
@@ -1180,7 +1184,7 @@ export const styles = StyleSheet.create({
     color: "#6B7280"
   },
   loanSegmentTabActiveText: {
-    color: "#00875A"
+    color: "#0F9D58"
   },
   loanRequestFormCard: {
     backgroundColor: "#ffffff",
@@ -1235,8 +1239,8 @@ export const styles = StyleSheet.create({
     borderColor: "#E5E7EB"
   },
   purposePillOptionActive: {
-    backgroundColor: "rgba(0,135,90,0.08)",
-    borderColor: "#00875A"
+    backgroundColor: "rgba(15, 157, 88,0.08)",
+    borderColor: "#0F9D58"
   },
   purposePillText: {
     fontSize: 12,
@@ -1244,12 +1248,12 @@ export const styles = StyleSheet.create({
     fontWeight: "600"
   },
   purposePillTextActive: {
-    color: "#00875A"
+    color: "#0F9D58"
   },
   estimatedRepaymentBannerBox: {
-    backgroundColor: "rgba(0,135,90,0.03)",
+    backgroundColor: "rgba(15, 157, 88,0.03)",
     borderWidth: 1,
-    borderColor: "rgba(0,135,90,0.08)",
+    borderColor: "rgba(15, 157, 88,0.08)",
     borderRadius: 14,
     padding: 16,
     marginTop: 20
@@ -1261,7 +1265,7 @@ export const styles = StyleSheet.create({
   repayEstVal: {
     fontSize: 20,
     fontWeight: "800",
-    color: "#00875A",
+    color: "#0F9D58",
     marginTop: 4
   },
   repayEstSub: {
@@ -1331,8 +1335,8 @@ export const styles = StyleSheet.create({
   loanVotingStatusBadge: {
     fontSize: 9,
     fontWeight: "bold",
-    color: "#00875A",
-    backgroundColor: "rgba(0,135,90,0.08)",
+    color: "#0F9D58",
+    backgroundColor: "rgba(15, 157, 88,0.08)",
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 4
@@ -1383,7 +1387,7 @@ export const styles = StyleSheet.create({
   },
   consensusProgressInnerBar: {
     height: "100%",
-    backgroundColor: "#00875A",
+    backgroundColor: "#0F9D58",
     borderRadius: 4
   },
   consensusMinRequiredText: {
@@ -1398,9 +1402,9 @@ export const styles = StyleSheet.create({
   },
   voteYesButton: {
     flex: 1,
-    backgroundColor: "rgba(0,135,90,0.05)",
+    backgroundColor: "rgba(15, 157, 88,0.05)",
     borderWidth: 1,
-    borderColor: "rgba(0,135,90,0.12)",
+    borderColor: "rgba(15, 157, 88,0.12)",
     paddingVertical: 10,
     borderRadius: 10,
     alignItems: "center"
@@ -1408,7 +1412,7 @@ export const styles = StyleSheet.create({
   voteYesButtonText: {
     fontSize: 12,
     fontWeight: "bold",
-    color: "#00875A"
+    color: "#0F9D58"
   },
   voteNoButton: {
     flex: 1,
@@ -1426,7 +1430,7 @@ export const styles = StyleSheet.create({
   },
   actionLoanDisburseButton: {
     flex: 1,
-    backgroundColor: "#00875A",
+    backgroundColor: "#0F9D58",
     paddingVertical: 10,
     borderRadius: 10,
     alignItems: "center"
@@ -1538,7 +1542,7 @@ export const styles = StyleSheet.create({
   },
   howItWorksLinkText: {
     fontSize: 12,
-    color: "#00875A",
+    color: "#0F9D58",
     fontWeight: "600"
   },
 
@@ -1556,7 +1560,7 @@ export const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: "rgba(0,135,90,0.08)",
+    backgroundColor: "rgba(15, 157, 88,0.08)",
     alignItems: "center",
     justifyContent: "center",
     marginRight: 16
@@ -1584,7 +1588,7 @@ export const styles = StyleSheet.create({
   },
   viewProfileBtnText: {
     fontSize: 12,
-    color: "#00875A",
+    color: "#0F9D58",
     fontWeight: "700"
   },
   menuLinksListCard: {
@@ -1642,9 +1646,9 @@ export const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: "rgba(0,135,90,0.08)",
+    backgroundColor: "rgba(15, 157, 88,0.08)",
     borderWidth: 2,
-    borderColor: "#00875A",
+    borderColor: "#0F9D58",
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 12
@@ -1729,7 +1733,7 @@ export const styles = StyleSheet.create({
     borderColor: "#E5E7EB"
   },
   pickerOptionButtonActive: {
-    backgroundColor: "#00875A"
+    backgroundColor: "#0F9D58"
   },
   pickerOptionText: {
     fontSize: 12,
@@ -1802,7 +1806,7 @@ export const styles = StyleSheet.create({
     borderRadius: 14
   },
   txFilterTabButtonActive: {
-    backgroundColor: "#00875A"
+    backgroundColor: "#0F9D58"
   },
   txFilterTabText: {
     fontSize: 11,
@@ -1839,7 +1843,7 @@ export const styles = StyleSheet.create({
     justifyContent: "center"
   },
   txBadgeIncome: {
-    backgroundColor: "rgba(0,135,90,0.06)"
+    backgroundColor: "rgba(15, 157, 88,0.06)"
   },
   txBadgeExpense: {
     backgroundColor: "rgba(239,68,68,0.06)"
@@ -1868,7 +1872,7 @@ export const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   txAmountIncome: {
-    color: "#00875A"
+    color: "#0F9D58"
   },
   txAmountExpense: {
     color: "#EF4444"
@@ -1879,7 +1883,7 @@ export const styles = StyleSheet.create({
     marginTop: 4
   },
   txStatusSuccess: {
-    color: "#00875A"
+    color: "#0F9D58"
   },
   txStatusPending: {
     color: "#E67E22"
@@ -1953,7 +1957,7 @@ export const styles = StyleSheet.create({
     borderRadius: 3
   },
   statusActiveDot: {
-    backgroundColor: "#00875A"
+    backgroundColor: "#0F9D58"
   },
   statusInactiveDot: {
     backgroundColor: "#EF4444"
@@ -1963,7 +1967,7 @@ export const styles = StyleSheet.create({
     fontWeight: "600"
   },
   statusActiveText: {
-    color: "#00875A"
+    color: "#0F9D58"
   },
   statusInactiveText: {
     color: "#EF4444"
@@ -2071,7 +2075,7 @@ export const styles = StyleSheet.create({
     justifyContent: "center"
   },
   loadingText: {
-    color: "#00875A",
+    color: "#0F9D58",
     fontSize: 14,
     fontWeight: "bold",
     marginTop: 10
@@ -2104,9 +2108,9 @@ export const styles = StyleSheet.create({
   },
   metamaskNetwork: {
     fontSize: 10,
-    color: "#00875A",
+    color: "#0F9D58",
     fontWeight: "600",
-    backgroundColor: "rgba(0,135,90,0.1)",
+    backgroundColor: "rgba(15, 157, 88,0.1)",
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 4
@@ -2310,7 +2314,7 @@ export const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: "rgba(0,135,90,0.06)",
+    backgroundColor: "rgba(15, 157, 88,0.06)",
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 14
@@ -2343,8 +2347,8 @@ export const styles = StyleSheet.create({
   receiptStatusTextLabel: {
     fontSize: 10,
     fontWeight: "bold",
-    color: "#00875A",
-    backgroundColor: "rgba(0,135,90,0.08)",
+    color: "#0F9D58",
+    backgroundColor: "rgba(15, 157, 88,0.08)",
     paddingHorizontal: 10,
     paddingVertical: 3,
     borderRadius: 6,
@@ -2386,7 +2390,7 @@ export const styles = StyleSheet.create({
   },
   receiptShareBtn: {
     width: "100%",
-    backgroundColor: "#00875A",
+    backgroundColor: "#0F9D58",
     borderRadius: 12,
     paddingVertical: 14,
     alignItems: "center"
@@ -2879,7 +2883,7 @@ export const styles = StyleSheet.create({
   },
   trackerProgressBarFill: {
     height: "100%",
-    backgroundColor: "#00875A",
+    backgroundColor: "#0F9D58",
     borderRadius: 3
   },
   trackerStatusDescText: {
@@ -2981,7 +2985,7 @@ export const styles = StyleSheet.create({
     lineHeight: 16
   },
   noLoanCardActionBtn: {
-    backgroundColor: "#00875A",
+    backgroundColor: "#0F9D58",
     borderRadius: 10,
     paddingHorizontal: 16,
     paddingVertical: 8,
@@ -3022,7 +3026,7 @@ export const styles = StyleSheet.create({
   goalStatsText: {
     fontSize: 15,
     fontWeight: "900",
-    color: "#00875A",
+    color: "#0F9D58",
     marginTop: 4
   },
   goalBottomRow: {
@@ -3056,7 +3060,7 @@ export const styles = StyleSheet.create({
   },
   viewAllTextLink: {
     fontSize: 11,
-    color: "#00875A",
+    color: "#0F9D58",
     fontWeight: "700"
   },
   activityListCard: {
@@ -3280,7 +3284,7 @@ export const styles = StyleSheet.create({
     width: 220,
     height: 220,
     borderWidth: 3,
-    borderColor: "#00875A",
+    borderColor: "#0F9D58",
     borderRadius: 24,
     alignItems: "center",
     justifyContent: "center",
@@ -3306,7 +3310,7 @@ export const styles = StyleSheet.create({
     alignItems: "center"
   },
   qrScannerSimulateBtn: {
-    backgroundColor: "#00875A",
+    backgroundColor: "#0F9D58",
     paddingVertical: 14,
     paddingHorizontal: 24,
     borderRadius: 12,
@@ -3321,7 +3325,7 @@ export const styles = StyleSheet.create({
 
   /* COMMON HELPERS */
   textGreen: {
-    color: "#00875A"
+    color: "#0F9D58"
   },
   textRed: {
     color: "#EF4444"
@@ -3363,7 +3367,7 @@ export const styles = StyleSheet.create({
   savingsTargetLabel: {
     fontSize: 13,
     fontWeight: "900",
-    color: "#00875A"
+    color: "#0F9D58"
   },
   savingsProgressDetailsRow: {
     flexDirection: "row",
@@ -3377,7 +3381,7 @@ export const styles = StyleSheet.create({
     color: "#64748B"
   },
   savingsQuickContributeBtn: {
-    backgroundColor: "#00875A",
+    backgroundColor: "#0F9D58",
     borderRadius: 8,
     paddingHorizontal: 10,
     paddingVertical: 6
@@ -3406,15 +3410,15 @@ export const styles = StyleSheet.create({
     marginBottom: 8
   },
   savingsAddGoalBtn: {
-    backgroundColor: "rgba(0, 135, 90, 0.08)",
+    backgroundColor: "rgba(15, 157, 88, 0.08)",
     borderRadius: 8,
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderWidth: 0.5,
-    borderColor: "#00875A"
+    borderColor: "#0F9D58"
   },
   savingsAddGoalBtnText: {
-    color: "#00875A",
+    color: "#0F9D58",
     fontSize: 10,
     fontWeight: "800"
   },
@@ -3432,7 +3436,7 @@ export const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 12,
-    backgroundColor: "rgba(0, 135, 90, 0.06)",
+    backgroundColor: "rgba(15, 157, 88, 0.06)",
     alignItems: "center",
     justifyContent: "center",
     marginRight: 12
@@ -3456,7 +3460,7 @@ export const styles = StyleSheet.create({
   savingsGoalPercentage: {
     fontSize: 12,
     fontWeight: "800",
-    color: "#00875A"
+    color: "#0F9D58"
   },
   savingsGoalProgressWrapper: {
     height: 5,
@@ -3471,7 +3475,7 @@ export const styles = StyleSheet.create({
   },
   savingsGoalProgressBarFill: {
     height: "100%",
-    backgroundColor: "#00875A",
+    backgroundColor: "#0F9D58",
     borderRadius: 2.5
   },
   savingsGoalStatsRow: {
@@ -3555,7 +3559,7 @@ export const styles = StyleSheet.create({
   communalRankVal: {
     fontSize: 15,
     fontWeight: "900",
-    color: "#00875A"
+    color: "#0F9D58"
   },
   communalDivider: {
     height: 0.5,
@@ -3573,7 +3577,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 8
   },
   rankItemRowActive: {
-    backgroundColor: "rgba(0, 135, 90, 0.05)"
+    backgroundColor: "rgba(15, 157, 88, 0.05)"
   },
   rankNumText: {
     fontSize: 11,
@@ -3655,8 +3659,8 @@ export const styles = StyleSheet.create({
     borderColor: "#CBD5E1"
   },
   filterPillActive: {
-    backgroundColor: "#00875A",
-    borderColor: "#00875A"
+    backgroundColor: "#0F9D58",
+    borderColor: "#0F9D58"
   },
   filterPillText: {
     fontSize: 9,
@@ -3732,13 +3736,13 @@ export const styles = StyleSheet.create({
     color: "#1E293B"
   },
   historyReceiptBtn: {
-    backgroundColor: "rgba(0, 135, 90, 0.08)",
+    backgroundColor: "rgba(15, 157, 88, 0.08)",
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6
   },
   historyReceiptBtnText: {
-    color: "#00875A",
+    color: "#0F9D58",
     fontSize: 8,
     fontWeight: "800"
   },
@@ -3822,7 +3826,7 @@ export const styles = StyleSheet.create({
     fontSize: 16
   },
   goalAddSubmitBtn: {
-    backgroundColor: "#00875A",
+    backgroundColor: "#0F9D58",
     borderRadius: 10,
     paddingVertical: 12,
     alignItems: "center",
@@ -3897,7 +3901,7 @@ export const styles = StyleSheet.create({
     marginTop: 4
   },
   loanRequestBtnPrimary: {
-    backgroundColor: "#00875A",
+    backgroundColor: "#0F9D58",
     borderRadius: 14,
     paddingVertical: 14,
     alignItems: "center",
@@ -3967,7 +3971,7 @@ export const styles = StyleSheet.create({
   repaymentTrackerPercent: {
     fontSize: 11,
     fontWeight: "700",
-    color: "#00875A"
+    color: "#0F9D58"
   },
   repaymentProgressOuterBar: {
     height: 8,
@@ -3977,7 +3981,7 @@ export const styles = StyleSheet.create({
   },
   repaymentProgressInnerBar: {
     height: "100%",
-    backgroundColor: "#00875A",
+    backgroundColor: "#0F9D58",
     borderRadius: 4
   },
   repaymentTrackerRemaining: {
@@ -4115,7 +4119,7 @@ export const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: "#00875A",
+    backgroundColor: "#0F9D58",
     marginRight: 10
   },
   factorLabel: {
@@ -4131,7 +4135,7 @@ export const styles = StyleSheet.create({
   factorStatusOk: {
     fontSize: 10,
     fontWeight: "700",
-    color: "#00875A",
+    color: "#0F9D58",
     backgroundColor: "#D1FAE5",
     paddingHorizontal: 6,
     paddingVertical: 2,
@@ -4185,7 +4189,7 @@ export const styles = StyleSheet.create({
   proposalAmount: {
     fontSize: 13,
     fontWeight: "800",
-    color: "#00875A"
+    color: "#0F9D58"
   },
   consensusProgressBarRow: {
     marginBottom: 12
@@ -4222,8 +4226,8 @@ export const styles = StyleSheet.create({
     borderColor: "#E2E8F0"
   },
   historyFilterPillActive: {
-    backgroundColor: "#00875A",
-    borderColor: "#00875A"
+    backgroundColor: "#0F9D58",
+    borderColor: "#0F9D58"
   },
   historyFilterPillText: {
     fontSize: 11,
@@ -4275,7 +4279,7 @@ export const styles = StyleSheet.create({
     color: "#94A3B8"
   },
   historyDisburseActionBtn: {
-    backgroundColor: "#00875A",
+    backgroundColor: "#0F9D58",
     borderRadius: 8,
     paddingVertical: 6,
     alignItems: "center",
@@ -4647,7 +4651,7 @@ export const styles = StyleSheet.create({
   activeTierIndicatorLabel: {
     fontSize: 9,
     fontWeight: "800",
-    color: "#00875A",
+    color: "#0F9D58",
     backgroundColor: "#D1FAE5",
     paddingHorizontal: 6,
     paddingVertical: 2,
@@ -4759,7 +4763,7 @@ export const styles = StyleSheet.create({
   activityPointsEarnedGreen: {
     fontSize: 12,
     fontWeight: "800",
-    color: "#00875A"
+    color: "#0F9D58"
   },
   
   // REDESIGNED MORE TAB AND DETAIL SUB-SCREENS STYLES
@@ -4806,7 +4810,7 @@ export const styles = StyleSheet.create({
     position: "absolute",
     bottom: -2,
     right: -2,
-    backgroundColor: "#00875A",
+    backgroundColor: "#0F9D58",
     width: 22,
     height: 22,
     borderRadius: 11,
@@ -4861,7 +4865,7 @@ export const styles = StyleSheet.create({
   moreRoleBadgeText: {
     fontSize: 10,
     fontWeight: "700",
-    color: "#00875A",
+    color: "#0F9D58",
   },
   moreScoreSummaryPanel: {
     backgroundColor: "#F8FAFC",
@@ -4883,13 +4887,13 @@ export const styles = StyleSheet.create({
   moreScoreVal: {
     fontSize: 24,
     fontWeight: "800",
-    color: "#00875A",
+    color: "#0F9D58",
     marginVertical: 2,
   },
   moreScoreRating: {
     fontSize: 9,
     fontWeight: "700",
-    color: "#00875A",
+    color: "#0F9D58",
   },
   moreScoreChevron: {
     position: "absolute",
@@ -5047,7 +5051,7 @@ export const styles = StyleSheet.create({
   statusPillGreenText: {
     fontSize: 11,
     fontWeight: "700",
-    color: "#00875A",
+    color: "#0F9D58",
   },
   walletAddressBox: {
     backgroundColor: "#F8FAFC",
@@ -5090,7 +5094,7 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#ffffff",
     borderWidth: 1,
-    borderColor: "#00875A",
+    borderColor: "#0F9D58",
     borderRadius: 14,
     paddingVertical: 12,
     marginHorizontal: 16,
@@ -5099,7 +5103,7 @@ export const styles = StyleSheet.create({
   walletActionBtnOutlineText: {
     fontSize: 13,
     fontWeight: "700",
-    color: "#00875A",
+    color: "#0F9D58",
   },
   walletActionBtnDisconnect: {
     flexDirection: "row",
@@ -5155,7 +5159,7 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
   },
   switchOuterTrackActive: {
-    backgroundColor: "#00875A",
+    backgroundColor: "#0F9D58",
   },
   switchInnerDot: {
     width: 20,
@@ -5218,8 +5222,8 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   pillSelectorBtnActive: {
-    backgroundColor: "#00875A",
-    borderColor: "#00875A",
+    backgroundColor: "#0F9D58",
+    borderColor: "#0F9D58",
   },
   pillSelectorBtnText: {
     fontSize: 12,
@@ -5259,7 +5263,7 @@ export const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: "#00875A",
+    backgroundColor: "#0F9D58",
   },
   announcementMainTitle: {
     fontSize: 14,
@@ -5277,7 +5281,7 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#ffffff",
     borderWidth: 1,
-    borderColor: "#00875A",
+    borderColor: "#0F9D58",
     borderRadius: 14,
     paddingVertical: 12,
     marginHorizontal: 16,
@@ -5287,7 +5291,7 @@ export const styles = StyleSheet.create({
   announcementsMarkReadBtnText: {
     fontSize: 13,
     fontWeight: "700",
-    color: "#00875A",
+    color: "#0F9D58",
   },
   aboutPlatformCardBox: {
     backgroundColor: "#ffffff",
@@ -5381,7 +5385,7 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#ffffff",
     borderWidth: 1,
-    borderColor: "#00875A",
+    borderColor: "#0F9D58",
     borderRadius: 12,
     paddingVertical: 10,
     marginTop: 10,
@@ -5389,7 +5393,7 @@ export const styles = StyleSheet.create({
   helpContactBtnOutlineText: {
     fontSize: 12,
     fontWeight: "700",
-    color: "#00875A",
+    color: "#0F9D58",
   },
   // IN-APP MESSAGE BANNER
   bannerOverlay: {

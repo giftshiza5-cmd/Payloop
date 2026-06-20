@@ -8,7 +8,7 @@ const router = express.Router();
  * @desc Create new user account and associated wallet record in PostgreSQL using a transaction
  */
 router.post("/register", async (req, res) => {
-  const { email, name, handle, phone, pin, avatar, gender, maritalStatus } = req.body;
+  const { email, name, handle, phone, pin, avatar, gender, maritalStatus, bio, occupation, dob, county } = req.body;
 
   if (!email || !name || !phone || !pin) {
     return res.status(400).json({ error: "Missing required fields (email, name, phone, pin)" });
@@ -44,16 +44,33 @@ router.post("/register", async (req, res) => {
       }
     }
 
-    const walletAddr = "0x" + Math.random().toString(16).substring(2, 42);
+    let walletAddr = req.body.walletAddress || req.body.wallet_address || req.body.address;
+    if (!walletAddr) {
+      // Generate a valid 40-character hex string (20 bytes)
+      walletAddr = "0x";
+      const hexChars = "0123456789abcdef";
+      for (let i = 0; i < 40; i++) {
+        walletAddr += hexChars[Math.floor(Math.random() * 16)];
+      }
+    }
 
-    // 2. Insert user
+    // 2. Generate sequential PL-USER code
+    const countRes = await client.query("SELECT COUNT(*) FROM users");
+    const nextNum = parseInt(countRes.rows[0].count) + 1;
+    const userIdCode = `PL-USER-${nextNum.toString().padStart(6, "0")}`;
+
+    // 3. Insert user
+    // Note: Email verification is disabled (removed OTP step).
+    // New users are auto-verified at FULLY_VERIFIED level so they can access all features immediately.
     const insertUserQuery = `
       INSERT INTO users (
-        name, email, password, phone, pin, handle, wallet_address, avatar, gender, marital_status
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+        user_id_code, name, email, password, phone, pin, handle, wallet_address, avatar, gender, marital_status, bio, occupation, dob, county, reputation_score,
+        is_email_verified, is_phone_verified, verification_level
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, 500, TRUE, TRUE, 'FULLY_VERIFIED')
       RETURNING *
     `;
     const userRes = await client.query(insertUserQuery, [
+      userIdCode,
       name,
       email,
       hashedPin, // password column
@@ -63,13 +80,17 @@ router.post("/register", async (req, res) => {
       walletAddr,
       avatar || "👤",
       gender || "Not Specified",
-      maritalStatus || "Not Specified"
+      maritalStatus || "Not Specified",
+      bio || "",
+      occupation || "",
+      dob || "",
+      county || ""
     ]);
 
-    // 3. Insert starting wallet
+    // 4. Insert starting wallet
     const insertWalletQuery = `
-      INSERT INTO wallets (user_email, balance, savings, active_loan, loop_points) 
-      VALUES ($1, 1000.00, 0.00, 0.00, 0)
+      INSERT INTO wallets (user_email, balance, savings, active_loan, loop_points, wallet_type) 
+      VALUES ($1, 1000.00, 0.00, 0.00, 0, 'PayLoop Wallet')
       RETURNING *
     `;
     const walletRes = await client.query(insertWalletQuery, [email]);
@@ -112,12 +133,13 @@ router.get("/profile", async (req, res) => {
   try {
     const query = `
       SELECT u.id, u.name, u.email, u.phone, u.pin, u.handle, u.wallet_address, 
-             u.avatar, u.gender, u.marital_status, u.joined_date, u.profile_completion, 
+             u.avatar, u.gender, u.marital_status, u.bio, u.occupation, u.dob, u.county,
+             u.joined_date, u.profile_completion, 
              u.status, u.credit_score, u.is_email_verified, u.is_phone_verified, 
-             u.verification_level,
+             u.verification_level, u.push_token,
              w.balance, w.savings, w.active_loan, w.loop_points
       FROM users u
-      LEFT JOIN wallets w ON u.email = w.user_email
+      LEFT JOIN wallets w ON u.email = w.user_email AND w.wallet_type = 'PayLoop Wallet'
       WHERE u.email = $1
     `;
     const result = await db.query(query, [email]);
@@ -146,7 +168,7 @@ router.get("/profile", async (req, res) => {
  * @desc Update selective profile parameters (avatar, gender, marital status)
  */
 router.post("/update-profile", async (req, res) => {
-  const { email, gender, maritalStatus, avatar } = req.body;
+  const { email, gender, maritalStatus, avatar, pushToken, bio, occupation, dob, county, name, phone } = req.body;
 
   if (!email) {
     return res.status(400).json({ error: "Missing email parameter" });
@@ -170,6 +192,34 @@ router.post("/update-profile", async (req, res) => {
       setClauses.push(`avatar = $${idx++}`);
       values.push(avatar);
     }
+    if (pushToken !== undefined) {
+      setClauses.push(`push_token = $${idx++}`);
+      values.push(pushToken);
+    }
+    if (bio !== undefined) {
+      setClauses.push(`bio = $${idx++}`);
+      values.push(bio);
+    }
+    if (occupation !== undefined) {
+      setClauses.push(`occupation = $${idx++}`);
+      values.push(occupation);
+    }
+    if (dob !== undefined) {
+      setClauses.push(`dob = $${idx++}`);
+      values.push(dob);
+    }
+    if (county !== undefined) {
+      setClauses.push(`county = $${idx++}`);
+      values.push(county);
+    }
+    if (name !== undefined) {
+      setClauses.push(`name = $${idx++}`);
+      values.push(name);
+    }
+    if (phone !== undefined) {
+      setClauses.push(`phone = $${idx++}`);
+      values.push(phone);
+    }
 
     if (setClauses.length === 0) {
       return res.status(400).json({ error: "No update parameters provided" });
@@ -191,12 +241,13 @@ router.post("/update-profile", async (req, res) => {
     // Fetch the full updated profile with wallet
     const selectQuery = `
       SELECT u.id, u.name, u.email, u.phone, u.pin, u.handle, u.wallet_address, 
-             u.avatar, u.gender, u.marital_status, u.joined_date, u.profile_completion, 
+             u.avatar, u.gender, u.marital_status, u.bio, u.occupation, u.dob, u.county,
+             u.joined_date, u.profile_completion, 
              u.status, u.credit_score, u.is_email_verified, u.is_phone_verified, 
-             u.verification_level,
+             u.verification_level, u.push_token,
              w.balance, w.savings, w.active_loan, w.loop_points
       FROM users u
-      LEFT JOIN wallets w ON u.email = w.user_email
+      LEFT JOIN wallets w ON u.email = w.user_email AND w.wallet_type = 'PayLoop Wallet'
       WHERE u.email = $1
     `;
     const fullProfile = await db.query(selectQuery, [email]);
@@ -325,12 +376,13 @@ router.get("/list", async (req, res) => {
   try {
     const query = `
       SELECT u.id, u.name, u.email, u.phone, u.pin, u.handle, u.wallet_address, 
-             u.avatar, u.gender, u.marital_status, u.joined_date, u.profile_completion, 
+             u.avatar, u.gender, u.marital_status, u.bio, u.occupation, u.dob, u.county,
+             u.joined_date, u.profile_completion, 
              u.status, u.credit_score, u.is_email_verified, u.is_phone_verified, 
-             u.verification_level,
+             u.verification_level, u.push_token,
              w.balance, w.savings, w.active_loan, w.loop_points
       FROM users u
-      LEFT JOIN wallets w ON u.email = w.user_email
+      LEFT JOIN wallets w ON u.email = w.user_email AND w.wallet_type = 'PayLoop Wallet'
       ORDER BY u.joined_date DESC
     `;
     const result = await db.query(query);

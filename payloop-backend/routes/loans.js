@@ -4,13 +4,13 @@ const router = express.Router();
 
 /**
  * @route POST /api/loans/request
- * @desc Request a new micro-loan
+ * @desc Request a new micro-loan for a specific group
  */
 router.post("/request", async (req, res) => {
-  const { email, amount, duration, purpose } = req.body;
+  const { email, amount, duration, purpose, groupId } = req.body;
 
-  if (!email || !amount || !duration) {
-    return res.status(400).json({ error: "Missing required parameters (email, amount, duration)" });
+  if (!email || !amount || !duration || !groupId) {
+    return res.status(400).json({ error: "Missing required parameters (email, amount, duration, groupId)" });
   }
 
   const loanAmount = parseFloat(amount);
@@ -33,6 +33,15 @@ router.post("/request", async (req, res) => {
 
     const userData = userRes.rows[0];
 
+    // Check group membership
+    const memberCheck = await db.query(
+      "SELECT 1 FROM group_members WHERE group_id = $1 AND user_email = $2",
+      [groupId, email]
+    );
+    if (memberCheck.rowCount === 0) {
+      return res.status(403).json({ error: "You must be a member of this group to request a loan." });
+    }
+
     // Determine interest rate based on credit score
     const score = userData.credit_score || 500;
     let interestRate = 12.0;
@@ -45,11 +54,12 @@ router.post("/request", async (req, res) => {
     // 2. Insert loan request
     const insertQuery = `
       INSERT INTO loans (
-        user_email, borrower, address, amount, interest_rate, duration, purpose, timestamp
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        group_id, user_email, borrower, address, amount, interest_rate, duration, purpose, timestamp, approved, status
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, false, 'Pending')
       RETURNING *
     `;
     const loanRes = await db.query(insertQuery, [
+      groupId,
       email,
       userData.name,
       userData.wallet_address,
@@ -79,12 +89,28 @@ router.post("/request", async (req, res) => {
 
 /**
  * @route GET /api/loans
- * @desc Fetch all group loans
+ * @desc Fetch all loans in the system, optionally filtered by groupId or user email
  */
 router.get("/", async (req, res) => {
+  const { groupId, email } = req.query;
+
   try {
-    const query = "SELECT * FROM loans ORDER BY timestamp DESC";
-    const result = await db.query(query);
+    let query = "SELECT * FROM loans";
+    const params = [];
+
+    if (groupId && email) {
+      query += " WHERE group_id = $1 AND user_email = $2";
+      params.push(groupId, email);
+    } else if (groupId) {
+      query += " WHERE group_id = $1";
+      params.push(groupId);
+    } else if (email) {
+      query += " WHERE user_email = $1";
+      params.push(email);
+    }
+
+    query += " ORDER BY timestamp DESC";
+    const result = await db.query(query, params);
 
     const loans = result.rows.map(row => ({
       ...row,
@@ -123,9 +149,9 @@ router.post("/vote", async (req, res) => {
     }
 
     const loanData = loanRes.rows[0];
-    if (loanData.approved || !loanData.active) {
+    if (loanData.approved || loanData.status !== "Pending") {
       await client.query("ROLLBACK");
-      return res.status(400).json({ error: "Voting is closed for this loan request" });
+      return res.status(400).json({ error: "Voting is closed or loan is already processed" });
     }
 
     // 2. Cast vote
@@ -139,55 +165,58 @@ router.post("/vote", async (req, res) => {
     }
 
     let approved = false;
+    let newStatus = "Pending";
     let repaymentDeadline = 0;
 
     // Check consensus threshold (3 affirmative votes)
     if (votesFor >= 3) {
       approved = true;
+      newStatus = "Approved";
       const durationMonths = parseInt(loanData.duration);
       repaymentDeadline = Math.floor(Date.now() / 1000) + (durationMonths * 30 * 86400);
 
       // Disburse wallet balances (add loan amount to user's wallet)
       const loanAmount = parseFloat(loanData.amount);
-      const updateWalletQuery = `
-        UPDATE wallets 
-        SET balance = balance + $1, 
-            active_loan = $1 
-        WHERE user_email = $2
-      `;
-      const walletUpdateRes = await client.query(updateWalletQuery, [loanAmount, loanData.user_email]);
+      
+      // Get borrower's primary wallet
+      const walletRes = await client.query(
+        "SELECT id, balance, active_loan FROM wallets WHERE user_email = $1 AND wallet_type = 'PayLoop Wallet' FOR UPDATE",
+        [loanData.user_email]
+      );
 
-      if (walletUpdateRes.rowCount === 0) {
-        // If user doesn't have a wallet, create one
-        const insertWalletQuery = `
-          INSERT INTO wallets (user_email, balance, active_loan)
-          VALUES ($1, $2, $2)
-        `;
-        await client.query(insertWalletQuery, [loanData.user_email, loanAmount]);
+      let walletId;
+      if (walletRes.rowCount > 0) {
+        walletId = walletRes.rows[0].id;
+        await client.query(
+          "UPDATE wallets SET balance = balance + $1, active_loan = active_loan + $1 WHERE id = $2",
+          [loanAmount, walletId]
+        );
+      } else {
+        // Create wallet if somehow missing
+        const insertWallet = await client.query(
+          "INSERT INTO wallets (user_email, balance, active_loan, wallet_type) VALUES ($1, $2, $2, 'PayLoop Wallet') RETURNING id",
+          [loanData.user_email, loanAmount]
+        );
+        walletId = insertWallet.rows[0].id;
       }
 
       // Log the disbursement transaction
       const txCode = `DB_${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
       const formattedDate = new Date().toLocaleDateString("en-GB", {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit"
+        day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit"
       });
-      const currentTimestamp = Date.now();
 
-      const insertTxQuery = `
-        INSERT INTO transactions (user_email, type, amount, date, reference, timestamp)
-        VALUES ($1, 'Loan Disbursement', $2, $3, $4, $5)
-      `;
-      await client.query(insertTxQuery, [
+      await client.query(`
+        INSERT INTO transactions (wallet_id, group_id, user_email, type, amount, date, reference, payment_method, timestamp)
+        VALUES ($1, $2, $3, 'Loan Disbursement', $4, $5, $6, 'Internal', $7)
+      `, [
+        walletId,
+        loanData.group_id,
         loanData.user_email,
-        "Loan Disbursement",
-        loanAmount, // Positive inflow
+        loanAmount,
         formattedDate,
         txCode,
-        currentTimestamp
+        Date.now()
       ]);
     }
 
@@ -197,10 +226,11 @@ router.post("/vote", async (req, res) => {
       SET votes_for = $1, 
           votes_against = $2, 
           approved = $3, 
-          repayment_deadline = $4 
-      WHERE id = $5
+          repayment_deadline = $4,
+          status = $5
+      WHERE id = $6
     `;
-    await client.query(updateLoanQuery, [votesFor, votesAgainst, approved, repaymentDeadline, loanId]);
+    await client.query(updateLoanQuery, [votesFor, votesAgainst, approved, repaymentDeadline, approved ? "Disbursed" : "Pending", loanId]);
 
     await client.query("COMMIT");
 
@@ -209,7 +239,8 @@ router.post("/vote", async (req, res) => {
       message: "Vote recorded successfully",
       votesFor,
       votesAgainst,
-      approved
+      approved,
+      status: approved ? "Disbursed" : "Pending"
     });
   } catch (error) {
     await client.query("ROLLBACK");
@@ -249,21 +280,22 @@ router.post("/repay", async (req, res) => {
     }
 
     const loanData = loanRes.rows[0];
-    if (loanData.repaid) {
+    if (loanData.repaid || loanData.status === "Repaid") {
       await client.query("ROLLBACK");
       return res.status(400).json({ error: "This loan is already fully repaid" });
     }
 
     // 2. Fetch user wallet and check balance
-    const selectWalletQuery = "SELECT balance, active_loan FROM wallets WHERE user_email = $1 FOR UPDATE";
+    const selectWalletQuery = "SELECT id, balance, active_loan FROM wallets WHERE user_email = $1 AND wallet_type = 'PayLoop Wallet' FOR UPDATE";
     const walletRes = await client.query(selectWalletQuery, [email]);
     if (walletRes.rowCount === 0) {
       await client.query("ROLLBACK");
-      return res.status(404).json({ error: "Wallet not found for this user" });
+      return res.status(404).json({ error: "PayLoop Wallet not found for this user" });
     }
 
-    const currentBalance = parseFloat(walletRes.rows[0].balance || 0);
-    const currentActiveLoan = parseFloat(walletRes.rows[0].active_loan || 0);
+    const wallet = walletRes.rows[0];
+    const currentBalance = parseFloat(wallet.balance || 0);
+    const currentActiveLoan = parseFloat(wallet.active_loan || 0);
 
     if (currentBalance < repayVal) {
       await client.query("ROLLBACK");
@@ -273,55 +305,42 @@ router.post("/repay", async (req, res) => {
     // 3. Log the repayment transaction (outflow)
     const txCode = `RP_${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
     const formattedDate = new Date().toLocaleDateString("en-GB", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit"
+      day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit"
     });
-    const currentTimestamp = Date.now();
 
-    const insertTxQuery = `
-      INSERT INTO transactions (user_email, type, amount, date, reference, timestamp)
-      VALUES ($1, 'Loan Repayment', $2, $3, $4, $5)
-    `;
-    await client.query(insertTxQuery, [
+    await client.query(`
+      INSERT INTO transactions (wallet_id, group_id, user_email, type, amount, date, reference, payment_method, timestamp)
+      VALUES ($1, $2, $3, 'Loan Repayment', $4, $5, $6, 'Internal', $7)
+    `, [
+      wallet.id,
+      loanData.group_id,
       email,
-      "Loan Repayment",
-      -repayVal, // Outflow to repay
+      -repayVal,
       formattedDate,
       txCode,
-      currentTimestamp
+      Date.now()
     ]);
 
     // 4. Update wallet balance and active loan status
     const newBalance = parseFloat((currentBalance - repayVal).toFixed(2));
     const newActiveLoan = parseFloat(Math.max(0, currentActiveLoan - repayVal).toFixed(2));
 
-    const updateWalletQuery = `
-      UPDATE wallets 
-      SET balance = $1, 
-          active_loan = $2 
-      WHERE user_email = $3
-    `;
-    await client.query(updateWalletQuery, [newBalance, newActiveLoan, email]);
+    await client.query(
+      "UPDATE wallets SET balance = $1, active_loan = $2 WHERE id = $3", 
+      [newBalance, newActiveLoan, wallet.id]
+    );
 
-    // 5. Update loan status to repaid if fully paid (sandbox logic marks it fully repaid)
-    const updateLoanQuery = `
-      UPDATE loans 
-      SET repaid = TRUE, 
-          active = FALSE 
-      WHERE id = $1
-    `;
-    await client.query(updateLoanQuery, [loanId]);
+    // 5. Update loan status to repaid
+    await client.query(
+      "UPDATE loans SET repaid = TRUE, active = FALSE, status = 'Repaid' WHERE id = $1", 
+      [loanId]
+    );
 
     // 6. Boost user credit score by +15 points
-    const updateScoreQuery = `
-      UPDATE users 
-      SET credit_score = LEAST(1000, credit_score + 15) 
-      WHERE email = $1
-    `;
-    await client.query(updateScoreQuery, [email]);
+    await client.query(
+      "UPDATE users SET credit_score = LEAST(1000, credit_score + 15), reputation_score = LEAST(1000, reputation_score + 15) WHERE email = $1", 
+      [email]
+    );
 
     await client.query("COMMIT");
 

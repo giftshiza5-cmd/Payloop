@@ -7,6 +7,9 @@ const authRouter = require("./routes/auth");
 const usersRouter = require("./routes/users");
 const savingsRouter = require("./routes/savings");
 const loansRouter = require("./routes/loans");
+const groupsRouter = require("./routes/groups");
+const walletsRouter = require("./routes/wallets");
+const adminRouter = require("./routes/admin");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -39,6 +42,9 @@ app.use("/api/auth", authRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/savings", savingsRouter);
 app.use("/api/loans", loansRouter);
+app.use("/api/groups", groupsRouter);
+app.use("/api/wallets", walletsRouter);
+app.use("/api/admin", adminRouter);
 
 const runMigration = require("./scripts/migrate");
 

@@ -1,8 +1,8 @@
 import Head from "next/head";
 import Link from "next/link";
-import { useAccount } from "wagmi";
 import { useEffect, useState } from "react";
 import ConnectButton from "../components/ConnectButton";
+import { useAccount } from "wagmi";
 
 export default function Home() {
   const { isConnected } = useAccount();
@@ -12,109 +12,121 @@ export default function Home() {
     setMounted(true);
   }, []);
 
+  if (!mounted) return null;
+
   return (
-    <div className="min-h-screen bg-black text-zinc-100 flex flex-col justify-between selection:bg-emerald-500 selection:text-black font-sans relative overflow-hidden">
-      {/* Dynamic Background Gradients */}
-      <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-500/10 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-teal-500/10 blur-[130px] pointer-events-none" />
+    <div className="min-h-screen bg-[#060608] text-zinc-100 flex flex-col justify-between selection:bg-emerald-500 selection:text-black font-sans relative overflow-hidden">
+      {/* Glow Effects */}
+      <div className="absolute top-[-25%] left-[-15%] w-[60%] h-[60%] rounded-full bg-emerald-500/10 blur-[130px] pointer-events-none" />
+      <div className="absolute bottom-[-20%] right-[-15%] w-[60%] h-[60%] rounded-full bg-teal-500/10 blur-[130px] pointer-events-none" />
+      
+      {/* Decorative Grid */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f0f13_1px,transparent_1px),linear-gradient(to_bottom,#0f0f13_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_40%,#000_70%,transparent_100%)] pointer-events-none opacity-40" />
 
       <Head>
-        <title>PayLoop — Decentralized Group Savings & Micro-Lending</title>
+        <title>PayLoop — Digital Chama & Cooperative Savings Ecosystem</title>
         <meta
           name="description"
-          content="Chamas on-chain. Secure multi-sig savings circles with peer-voted micro-loans and dynamic credit reputation scoring."
+          content="Modern multi-group ecosystem for SACCOs, Chamas, and Investment Clubs. Secure savings, credit reputation, and micro-lending."
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       {/* Header */}
       <header className="w-full max-w-7xl mx-auto px-6 py-6 flex items-center justify-between z-10">
-        <div className="flex items-center gap-2">
-          <span className="text-2xl">💸</span>
-          <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
+        <div className="flex items-center gap-3">
+          <span className="text-3xl">💸</span>
+          <span className="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-emerald-400 via-teal-400 to-indigo-400 bg-clip-text text-transparent">
             PayLoop
           </span>
         </div>
-        <ConnectButton />
+        
+        <div className="flex items-center gap-6">
+          <Link href="/transparency" className="text-zinc-400 hover:text-zinc-200 text-sm font-medium transition-colors hidden md:block">
+            Transparency Ledger
+          </Link>
+          <div className="h-4 w-px bg-zinc-800 hidden md:block" />
+          <Link href="/login" className="text-zinc-300 hover:text-white text-sm font-medium transition-colors">
+            Sign In
+          </Link>
+          <Link
+            href="/register"
+            className="px-4 py-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-black font-semibold rounded-xl shadow-lg shadow-emerald-500/10 text-sm active:scale-95 transition-all"
+          >
+            Create Account
+          </Link>
+        </div>
       </header>
 
       {/* Hero Section */}
       <main className="flex-grow flex items-center justify-center px-6 py-12 z-10">
         <div className="w-full max-w-5xl mx-auto text-center flex flex-col items-center gap-8">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-zinc-950 border border-zinc-800 text-xs text-emerald-400 font-semibold tracking-wide uppercase">
-            🚀 ELDOHUB WEB3 HACKATHON BUILD
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-zinc-950/80 border border-zinc-850 text-xs text-emerald-400 font-semibold tracking-wide uppercase shadow-inner shadow-black/40">
+            🚀 Multi-Group Savings & Lending Ecosystem
           </div>
           
-          <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white max-w-3xl leading-tight">
-            Decentralize Your Group Savings with{" "}
-            <span className="bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
-              PayLoop
+          <h1 className="text-4xl sm:text-7xl font-extrabold tracking-tight text-white max-w-4xl leading-tight">
+            The Digital Wallet Built for{" "}
+            <span className="bg-gradient-to-r from-emerald-400 via-teal-400 to-indigo-400 bg-clip-text text-transparent">
+              Chamas & SACCOs
             </span>
           </h1>
 
-          <p className="text-zinc-400 text-lg sm:text-xl max-w-2xl">
-            Bring your savings circles (Chamas) on-chain. Eliminate fraud with multi-sig vaults,
-            vote on micro-loans, and build a verifiable credit history with MetaMask.
+          <p className="text-zinc-400 text-lg sm:text-xl max-w-2xl leading-relaxed">
+            Move your savings circles, investment clubs, and welfare groups into a secure, transparent digital ecosystem. Track your reputation score, save weekly, and request group-approved loans.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center gap-4 mt-4">
-            {mounted && isConnected ? (
-              <Link
-                href="/dashboard"
-                className="px-8 py-3.5 bg-white text-black hover:bg-zinc-200 font-semibold rounded-full shadow-lg shadow-white/5 transition-transform active:scale-95 duration-150"
-              >
-                Enter Admin Dashboard →
-              </Link>
-            ) : (
-              <div className="bg-zinc-900/40 p-1.5 rounded-full border border-zinc-800 backdrop-blur-sm shadow-xl">
-                <ConnectButton />
-              </div>
-            )}
-            <a
-              href="https://github.com"
-              target="_blank"
-              rel="noreferrer"
-              className="px-6 py-3.5 bg-zinc-900/60 border border-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-800/80 rounded-full font-medium transition-colors backdrop-blur-sm"
+          <div className="flex flex-col sm:flex-row items-center gap-4 mt-6">
+            <Link
+              href="/register"
+              className="px-8 py-4 bg-white hover:bg-zinc-100 text-black font-bold rounded-2xl shadow-xl shadow-white/5 active:scale-95 transition-all w-full sm:w-auto"
             >
-              Explore Protocol Code
-            </a>
+              Get Started Now
+            </Link>
+            
+            <Link
+              href="/login"
+              className="px-8 py-4 bg-zinc-950/60 hover:bg-zinc-900 border border-zinc-850 text-zinc-300 hover:text-white rounded-2xl font-semibold backdrop-blur-md transition-all active:scale-95 w-full sm:w-auto"
+            >
+              Member Sign In →
+            </Link>
           </div>
 
           {/* Features Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 w-full text-left">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-20 w-full text-left">
             {/* Feature 1 */}
-            <div className="bg-zinc-950/40 border border-zinc-900 p-6 rounded-2xl backdrop-blur-md hover:border-zinc-800 transition-all group">
-              <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400 text-xl font-bold mb-4 group-hover:scale-110 transition-transform">
-                🔐
+            <div className="bg-zinc-950/30 border border-zinc-900/80 hover:border-zinc-850 p-6 rounded-2xl backdrop-blur-md transition-all group relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-emerald-500/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 text-2xl mb-4 group-hover:scale-110 transition-transform">
+                👥
               </div>
-              <h3 className="text-lg font-bold text-white mb-2">Treasurer Fraud Proof</h3>
+              <h3 className="text-lg font-bold text-white mb-2">Multi-Group ecosystem</h3>
               <p className="text-zinc-400 text-sm leading-relaxed">
-                Vault logic rules are enforced by Solidity smart contracts. Withdrawals require
-                multiple signatures from group administrators before any funds move.
+                Join multiple chamas, investment groups, or cooperative societies. Access a personalized dashboard for each group, keeping records completely separated.
               </p>
             </div>
 
             {/* Feature 2 */}
-            <div className="bg-zinc-950/40 border border-zinc-900 p-6 rounded-2xl backdrop-blur-md hover:border-zinc-800 transition-all group">
-              <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400 text-xl font-bold mb-4 group-hover:scale-110 transition-transform">
-                🗳️
+            <div className="bg-zinc-950/30 border border-zinc-900/80 hover:border-zinc-850 p-6 rounded-2xl backdrop-blur-md transition-all group relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-teal-500/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="w-12 h-12 rounded-xl bg-teal-500/10 flex items-center justify-center text-teal-400 text-2xl mb-4 group-hover:scale-110 transition-transform">
+                💳
               </div>
-              <h3 className="text-lg font-bold text-white mb-2">Peer-Voted Micro-Loans</h3>
+              <h3 className="text-lg font-bold text-white mb-2">PayLoop Multi-Wallet</h3>
               <p className="text-zinc-400 text-sm leading-relaxed">
-                Members request loans directly from the shared pool. Smart contracts lock/unlock
-                funds according to voting rules: 1 wallet = 1 vote.
+                Receive an automatic internal PayLoop Wallet. Link external accounts including M-Pesa, bank accounts, or MetaMask, and easily move funds between them.
               </p>
             </div>
 
             {/* Feature 3 */}
-            <div className="bg-zinc-950/40 border border-zinc-900 p-6 rounded-2xl backdrop-blur-md hover:border-zinc-800 transition-all group">
-              <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400 text-xl font-bold mb-4 group-hover:scale-110 transition-transform">
+            <div className="bg-zinc-950/30 border border-zinc-900/80 hover:border-zinc-850 p-6 rounded-2xl backdrop-blur-md transition-all group relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-indigo-500/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 text-2xl mb-4 group-hover:scale-110 transition-transform">
                 📈
               </div>
-              <h3 className="text-lg font-bold text-white mb-2">On-Chain Credit Score</h3>
+              <h3 className="text-lg font-bold text-white mb-2">Member Reputation Scoring</h3>
               <p className="text-zinc-400 text-sm leading-relaxed">
-                Say goodbye to ignored savings history. Building savings cycles on-chain constructs
-                a public reputation metric that drops loan interest rates.
+                Build a verifiable savings reputation score (`CreditLoop`). On-time weekly deposits raise your score and lower your interest rates for chama micro-loans.
               </p>
             </div>
           </div>
@@ -122,9 +134,10 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full max-w-7xl mx-auto px-6 py-6 border-t border-zinc-900 text-center text-zinc-600 text-xs z-10 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <p>© 2026 PayLoop. Built for Eldohub Web3 Hackathon.</p>
-        <div className="flex gap-4">
+      <footer className="w-full max-w-7xl mx-auto px-6 py-6 border-t border-zinc-950 text-center text-zinc-650 text-xs z-10 flex flex-col sm:flex-row items-center justify-between gap-4 mt-12">
+        <p>© 2026 PayLoop Platform. Digitizing cooperatives and community-led savings.</p>
+        <div className="flex gap-6">
+          <Link href="/transparency" className="hover:text-zinc-400 transition-colors">Ledger Explorer</Link>
           <a href="#" className="hover:text-zinc-400 transition-colors">Privacy Policy</a>
           <a href="#" className="hover:text-zinc-400 transition-colors">Terms of Service</a>
         </div>

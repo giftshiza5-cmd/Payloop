@@ -19,16 +19,18 @@ export const ABIS = {
     "function contribute() payable"
   ],
   LendingPool: [
-    "function loans(uint255) view returns (uint256 id, address borrower, uint256 amount, uint256 interestRate, uint256 duration, uint256 repaymentDeadline, uint256 votesFor, uint256 votesAgainst, bool active, bool approved, bool repaid, uint255 requestedAt)",
+    "function loans(uint256) view returns (uint256 id, address borrower, uint256 amount, uint256 interestRate, uint256 duration, uint256 repaymentDeadline, uint256 votesFor, uint256 votesAgainst, bool active, bool approved, bool repaid, uint256 requestedAt)",
     "function getLoansCount() view returns (uint256)",
     "function requestLoan(uint256 amount, uint256 duration)",
     "function voteOnLoan(uint256 loanId, bool support)",
     "function repayLoan(uint256 loanId) payable"
   ],
   CreditScore: [
-    "function getCreditScore(address) view returns (uint256)"
+    "function getCreditScore(address) view returns (uint256)",
+    "function updateScore(address user, uint256 score)"
   ],
   LoopToken: [
-    "function balanceOf(address) view returns (uint256)"
+    "function balanceOf(address) view returns (uint256)",
+    "function transfer(address to, uint256 amount) returns (bool)"
   ]
 };
