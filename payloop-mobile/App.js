@@ -8,6 +8,7 @@ import Welcome from "./src/screens/Welcome";
 import Register from "./src/screens/Register";
 import Login from "./src/screens/Login";
 import Pin from "./src/screens/Pin";
+import CompleteProfile from "./src/screens/CompleteProfile";
 import Dashboard from "./src/screens/Dashboard";
 import { styles } from "./styles";
 
@@ -49,6 +50,8 @@ function RootNavigator() {
         return <Login />;
       case "pin":
         return <Pin />;
+      case "completeProfile":
+        return <CompleteProfile />;
       case "dashboard":
         return <Dashboard />;
       default:

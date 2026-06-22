@@ -19,14 +19,7 @@ export default function UssdSim() {
   } = useApp();
 
   return (
-    <View style={styles.tabContentLight}>
-      <View style={styles.subScreenHeader}>
-        <TouchableOpacity onPress={() => setActiveSubScreen(null)} style={styles.backButton}>
-          <Text style={styles.backButtonText}>←</Text>
-        </TouchableOpacity>
-        <Text style={styles.subScreenTitle}>USSD Simulator</Text>
-        <View style={{ width: 40 }} />
-      </View>
+    <View style={[styles.tabContentLight, { paddingTop: 16 }]}>
 
       <View style={styles.ussdPhoneOutlineFrame}>
         {/* Screen bezel */}

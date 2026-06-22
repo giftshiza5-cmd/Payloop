@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Text, TouchableOpacity, ScrollView, TextInput, ActivityIndicator } from "react-native";
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, ScrollView, TextInput, ActivityIndicator, Alert, Linking } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useApp } from "../context/AppContext";
 
@@ -232,6 +232,51 @@ export default function Login() {
             >
               <Text style={{ color: isDark ? "#9CA3AF" : "#6B7280", fontSize: 13 }}>
                 Forgot Password? <Text style={{ color: "#0F9D58", fontWeight: "700" }}>Reset Here</Text>
+              </Text>
+            </TouchableOpacity>
+
+            <View style={{ flexDirection: "row", alignItems: "center", marginVertical: 20 }}>
+              <View style={{ flex: 1, height: 1, backgroundColor: isDark ? "#374151" : "#E5E7EB" }} />
+              <Text style={{ marginHorizontal: 10, color: isDark ? "#9CA3AF" : "#6B7280", fontSize: 12 }}>OR</Text>
+              <View style={{ flex: 1, height: 1, backgroundColor: isDark ? "#374151" : "#E5E7EB" }} />
+            </View>
+
+            <TouchableOpacity
+              onPress={() => {
+                Linking.openURL("https://metamask.app.link/dapp/app.payloop.com").catch(err => {
+                  console.log("MetaMask app not installed, simulating redirect...");
+                });
+                
+                setTimeout(() => {
+                  const mockMetaMaskUser = {
+                    name: "MetaMask User",
+                    email: "metamask@payloop.com",
+                    address: "0x71C27918573b35481a34a38060c5EFE6230fE151",
+                    isMetaMask: true,
+                    creditScore: 650,
+                    verification_level: "BASIC",
+                    avatarUri: "https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg"
+                  };
+                  setSelectedUser(mockMetaMaskUser);
+                  setPinCode("");
+                  setCurrentScreen("pin");
+                }, 1500);
+              }}
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 8,
+                backgroundColor: isDark ? "rgba(245, 158, 11, 0.15)" : "#FFF3E0",
+                borderWidth: 1.5,
+                borderColor: "#F59E0B",
+                borderRadius: 14,
+                paddingVertical: 14,
+              }}
+            >
+              <Text style={{ fontSize: 18 }}>🦊</Text>
+              <Text style={{ fontWeight: "bold", color: "#F59E0B", fontSize: 16 }}>
+                Sign In with MetaMask
               </Text>
             </TouchableOpacity>
           </View>

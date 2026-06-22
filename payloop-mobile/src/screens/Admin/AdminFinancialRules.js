@@ -60,14 +60,7 @@ export default function AdminFinancialRules() {
   };
 
   return (
-    <ScrollView style={[styles.tabContentLight, { backgroundColor: themeBg }]} showsVerticalScrollIndicator={false}>
-      <View style={styles.subScreenHeader}>
-        <TouchableOpacity onPress={() => setActiveSubScreen(null)} style={[styles.backButton, { backgroundColor: themeCardBg, borderColor: themeBorderColor }]}>
-          <Text style={[styles.backButtonText, { color: themeTextColor }]}>←</Text>
-        </TouchableOpacity>
-        <Text style={[styles.subScreenTitle, { color: themeTextColor, fontSize: 18 }]}>Financial Control Panel</Text>
-        <View style={{ width: 40 }} />
-      </View>
+    <ScrollView style={[styles.tabContentLight, { backgroundColor: themeBg, paddingTop: 16 }]} showsVerticalScrollIndicator={false}>
 
       <View style={{ paddingHorizontal: 16, paddingBottom: 30 }}>
         <Text style={{ fontSize: 12, color: themeSubtitleColor, marginBottom: 16 }}>

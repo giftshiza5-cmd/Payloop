@@ -15,14 +15,7 @@ export default function HelpCenter() {
   } = useApp();
 
   return (
-    <ScrollView style={[styles.tabContentLight, { backgroundColor: themeBg }]} showsVerticalScrollIndicator={false}>
-      <View style={styles.subScreenHeader}>
-        <TouchableOpacity onPress={() => setActiveSubScreen(null)} style={[styles.backButton, { backgroundColor: themeCardBg, borderColor: themeBorderColor }]}>
-          <Text style={[styles.backButtonText, { color: themeTextColor }]}>←</Text>
-        </TouchableOpacity>
-        <Text style={[styles.subScreenTitle, { color: themeTextColor }]}>Help & Support</Text>
-        <View style={{ width: 40 }} />
-      </View>
+    <ScrollView style={[styles.tabContentLight, { backgroundColor: themeBg, paddingTop: 16 }]} showsVerticalScrollIndicator={false}>
 
       <View style={[styles.detailCardBox, { backgroundColor: themeCardBg, borderColor: themeBorderColor }]}>
         <Text style={[styles.detailCardHeader, { color: themeTextColor }]}>Frequently Asked Questions</Text>

@@ -31,7 +31,10 @@ export default function MoreTab() {
     setSelectedUser,
     setCurrentScreen,
     setCurrentGroupRole,
-    setAdminPrivileges
+    setAdminPrivileges,
+    userGroups,
+    setCurrentGroup,
+    fetchGroupData
   } = useApp();
 
   if (!selectedUser) return null;
@@ -146,6 +149,52 @@ export default function MoreTab() {
           ))}
         </View>
       </View>
+
+      {/* ── ACTIVE WORKSPACE (Chama Switcher) ── */}
+      {userGroups && userGroups.length > 0 && (
+        <>
+          <SectionLabel text="Active Workspace" color="#0F9D58" />
+          <SectionCard style={{ paddingVertical: 4 }}>
+            {userGroups.map((grp, idx) => {
+              const isSelected = currentGroup?.id === grp.id;
+              return (
+                <View key={grp.id}>
+                  <TouchableOpacity
+                    onPress={async () => {
+                      if (isSelected) return;
+                      setCurrentGroup(grp);
+                      await fetchGroupData(grp.id, selectedUser.email);
+                      showBanner(`Switched to Chama: ${grp.name}`, "success");
+                    }}
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      paddingVertical: 12,
+                      paddingHorizontal: 16,
+                      backgroundColor: isSelected ? (isDark ? "rgba(15, 157, 88, 0.08)" : "rgba(15, 157, 88, 0.05)") : "transparent",
+                    }}
+                    activeOpacity={0.65}
+                  >
+                    <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+                      <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: isSelected ? "#0F9D58" : "#94A3B8" }} />
+                      <Text style={{ fontSize: 13, fontWeight: isSelected ? "700" : "500", color: isSelected ? "#0F9D58" : themeTextColor }}>
+                        {grp.name}
+                      </Text>
+                    </View>
+                    {isSelected ? (
+                      <Text style={{ color: "#0F9D58", fontSize: 11, fontWeight: "800" }}>Active ✓</Text>
+                    ) : (
+                      <Text style={{ color: themeSubtitleColor, fontSize: 11 }}>Switch</Text>
+                    )}
+                  </TouchableOpacity>
+                  {idx < userGroups.length - 1 && <View style={{ height: 1, backgroundColor: themeDividerColor, marginLeft: 16 }} />}
+                </View>
+              );
+            })}
+          </SectionCard>
+        </>
+      )}
 
       {/* ── ADMIN TOOLS SECTION (Admin only) ── */}
       {isAdmin && (
@@ -284,7 +333,7 @@ export default function MoreTab() {
         <MenuDivider />
         <MenuRow label="Appearance" desc={`Theme: ${isDark ? "Dark" : "Light"} · Language & display`} accentColor="#F97316" onPress={() => setActiveSubScreen("appearanceSettings")} />
         <MenuDivider />
-        <MenuRow label="Notifications" desc="Push alerts, reminders and contribution nudges" accentColor="#EC4899" onPress={() => setActiveSubScreen("notifications")} />
+        <MenuRow label="System Settings" desc="Customize transaction limits, notifications, and biometric login" accentColor="#10B981" onPress={() => Alert.alert("Settings", "Simulating settings menu. Customize limits, notifications, and biometric login.")} />
       </SectionCard>
 
       {/* ── ABOUT & SUPPORT ── */}

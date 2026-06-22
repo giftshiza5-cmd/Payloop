@@ -42,6 +42,11 @@ export default function HomeTab() {
     members,
     isDark,
     themeTextColor,
+    themeBg,
+    themeCardBg,
+    themeBorderColor,
+    themeSubtitleColor,
+    themeDividerColor,
     t
   } = useApp();
 
@@ -353,7 +358,7 @@ export default function HomeTab() {
 
       {/* 2. QUICK ACTIONS GRID (2 Columns) */}
       <View style={styles.quickActionsContainer}>
-        <Text style={styles.homeSectionTitle}>Quick Services</Text>
+        <Text style={[styles.homeSectionTitle, { color: themeTextColor }]}>Quick Services</Text>
         <View style={styles.quickActionsGrid}>
           
           <TouchableOpacity onPress={() => setActiveSubScreen("contribute")} style={styles.quickActionCard}>
@@ -396,44 +401,35 @@ export default function HomeTab() {
           </TouchableOpacity>
 
           <TouchableOpacity 
-            onPress={() => {
-              Alert.alert(
-                "Wallet Identity", 
-                `Address:\n${selectedUser.address}\n\nNetwork: Polygon Amoy\nStatus: Connected ✅`,
-                [
-                  { text: "Copy Address", onPress: () => Share.share({ message: selectedUser.address }) },
-                  { text: "Close", style: "cancel" }
-                ]
-              );
-            }} 
-            style={styles.quickActionCard}
+            onPress={() => setActiveSubScreen("walletDetails")} 
+            style={[styles.quickActionCard, { backgroundColor: themeCardBg, borderColor: themeBorderColor }]}
           >
             <View style={[styles.actionIconWrapper, { backgroundColor: 'rgba(79, 70, 229, 0.08)' }]}>
               <Text style={styles.actionIconEmoji}>💼</Text>
             </View>
             <View style={styles.actionTextCol}>
-              <Text style={styles.actionTitle}>View Wallet</Text>
-              <Text style={styles.actionSubtitle}>Manage Web3</Text>
+              <Text style={[styles.actionTitle, { color: themeTextColor }]}>View Wallet</Text>
+              <Text style={[styles.actionSubtitle, { color: themeSubtitleColor }]}>Manage Web3</Text>
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => setActiveSubScreen("transactions")} style={styles.quickActionCard}>
+          <TouchableOpacity onPress={() => setActiveSubScreen("transactions")} style={[styles.quickActionCard, { backgroundColor: themeCardBg, borderColor: themeBorderColor }]}>
             <View style={[styles.actionIconWrapper, { backgroundColor: 'rgba(217, 119, 6, 0.08)' }]}>
               <Text style={styles.actionIconEmoji}>🧾</Text>
             </View>
             <View style={styles.actionTextCol}>
-              <Text style={styles.actionTitle}>Receipts</Text>
-              <Text style={styles.actionSubtitle}>Get history</Text>
+              <Text style={[styles.actionTitle, { color: themeTextColor }]}>Receipts</Text>
+              <Text style={[styles.actionSubtitle, { color: themeSubtitleColor }]}>Get history</Text>
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => setShowQrScanner(true)} style={styles.quickActionCard}>
+          <TouchableOpacity onPress={() => setShowQrScanner(true)} style={[styles.quickActionCard, { backgroundColor: themeCardBg, borderColor: themeBorderColor }]}>
             <View style={[styles.actionIconWrapper, { backgroundColor: 'rgba(107, 114, 128, 0.08)' }]}>
               <Text style={styles.actionIconEmoji}>📷</Text>
             </View>
             <View style={styles.actionTextCol}>
-              <Text style={styles.actionTitle}>Scan QR</Text>
-              <Text style={styles.actionSubtitle}>Scan to verify</Text>
+              <Text style={[styles.actionTitle, { color: themeTextColor }]}>Scan QR</Text>
+              <Text style={[styles.actionSubtitle, { color: themeSubtitleColor }]}>Scan to verify</Text>
             </View>
           </TouchableOpacity>
 
@@ -441,10 +437,13 @@ export default function HomeTab() {
       </View>
 
       {/* 3. CREDITLOOP SCORE CARD */}
-      <View style={styles.creditLoopCard}>
-        <Text style={styles.homeSectionTitle}>CreditLoop Reputation</Text>
-        <View style={styles.creditScoreContentBox}>
-          {renderCreditScoreCircleGauge(selectedUser.creditScore, tier)}
+      <View style={{ marginBottom: 24 }}>
+        <View style={{ borderLeftWidth: 4, borderLeftColor: "#F59E0B", paddingLeft: 8, marginBottom: 12 }}>
+          <Text style={[styles.homeSectionTitle, { color: themeTextColor, fontSize: 16, fontWeight: "800", marginBottom: 0 }]}>CreditLoop Reputation</Text>
+        </View>
+        <View style={[styles.creditLoopCard, { backgroundColor: themeCardBg, borderColor: themeBorderColor, borderWidth: 1 }]}>
+          <View style={styles.creditScoreContentBox}>
+            {renderCreditScoreCircleGauge(selectedUser.creditScore, tier)}
 
           <View style={styles.creditScoreDetailsCol}>
             <View style={styles.scoreLevelRow}>
@@ -460,15 +459,18 @@ export default function HomeTab() {
               💡 Every timely contribution increases your score and lowers borrowing rates.
             </Text>
           </View>
+          </View>
         </View>
       </View>
 
       {/* 4. CONTRIBUTION TRACKER WIDGET */}
       <View style={styles.trackerContainer}>
-        <Text style={styles.homeSectionTitle}>Contribution Tracker</Text>
+        <View style={{ borderLeftWidth: 4, borderLeftColor: "#3B82F6", paddingLeft: 8, marginBottom: 12 }}>
+          <Text style={[styles.homeSectionTitle, { color: themeTextColor, fontSize: 16, fontWeight: "800", marginBottom: 0 }]}>Contribution Tracker</Text>
+        </View>
         
         {selectedUser.savings === 0 ? (
-          <View style={[styles.trackerCard, styles.trackerOverdueCard]}>
+          <View style={[styles.trackerCard, styles.trackerOverdueCard, { backgroundColor: themeCardBg, borderColor: "#EF4444", borderWidth: 1 }]}>
             <View style={styles.trackerHeaderRow}>
               <View style={styles.trackerTitleCol}>
                 <Text style={[styles.trackerCardLabel, { color: '#DC2626' }]}>WEEKLY CHAMA CONTRIBUTION</Text>
@@ -487,7 +489,7 @@ export default function HomeTab() {
             </Text>
           </View>
         ) : (
-          <View style={styles.trackerCard}>
+          <View style={[styles.trackerCard, { backgroundColor: themeCardBg, borderColor: themeBorderColor, borderWidth: 1 }]}>
             <View style={styles.trackerHeaderRow}>
               <View style={styles.trackerTitleCol}>
                 <Text style={styles.trackerCardLabel}>WEEKLY CHAMA CONTRIBUTION</Text>
@@ -510,9 +512,13 @@ export default function HomeTab() {
 
       {/* 5. ACTIVE LOAN OVERVIEW */}
       <View style={styles.activeLoanContainer}>
-        <Text style={styles.homeSectionTitle}>Active Loan Status</Text>
+        <View style={{ borderLeftWidth: 4, borderLeftColor: "#8B5CF6", paddingLeft: 8, marginBottom: 12 }}>
+          <Text style={[styles.homeSectionTitle, { color: themeTextColor, fontSize: 16, fontWeight: "800", marginBottom: 0 }]}>Active Loan Status</Text>
+        </View>
         
         {selectedUser.activeLoan > 0 ? (
+          <View style={[styles.activeLoanCard, { backgroundColor: themeCardBg, borderColor: themeBorderColor, borderWidth: 1 }]}>
+            <View style={styles.loanHeaderRow}>
           <View style={styles.loanStatusCard}>
             <View style={styles.loanHeaderRow}>
               <View>
@@ -537,8 +543,9 @@ export default function HomeTab() {
             </View>
           </View>
         ) : (
-          <View style={styles.noLoanStatusCard}>
-            <Text style={styles.noLoanCardHeader}>No Active Loans</Text>
+          <View style={[styles.noLoanCard, { backgroundColor: themeCardBg, borderColor: themeBorderColor, borderWidth: 1 }]}>
+            <Text style={{ fontSize: 32, marginBottom: 8 }}>🎉</Text>
+            <Text style={[styles.noLoanTitle, { color: themeTextColor }]}>You are debt-free!</Text>
             <Text style={styles.noLoanCardMessage}>
               Based on your {tier.badge} credit tier, you are currently pre-approved for loans up to **{formatValue(25000 / KES_PER_USDC)}** at a premium rate of only **{tier.rate}% p.a.**
             </Text>
@@ -554,7 +561,7 @@ export default function HomeTab() {
 
       {/* 6. SAVINGS GOAL PROGRESS CARD */}
       <View style={styles.goalContainer}>
-        <Text style={styles.homeSectionTitle}>Savings Target Goal</Text>
+        <Text style={[styles.homeSectionTitle, { color: themeTextColor }]}>Savings Target Goal</Text>
         {savingsGoal && (
           <View style={styles.goalCard}>
             <View style={styles.goalTopRow}>
@@ -577,7 +584,7 @@ export default function HomeTab() {
       {/* 7. RECENT ACTIVITIES FEED */}
       <View style={styles.activityFeedContainer}>
         <View style={styles.sectionHeaderRow}>
-          <Text style={styles.homeSectionTitle}>Recent Activities</Text>
+          <Text style={[styles.homeSectionTitle, { color: themeTextColor }]}>Recent Activities</Text>
           <TouchableOpacity onPress={() => setActiveSubScreen("transactions")}>
             <Text style={styles.viewAllTextLink}>View All ›</Text>
           </TouchableOpacity>
@@ -606,7 +613,7 @@ export default function HomeTab() {
 
       {/* 8. CHAMA INFO SECTION */}
       <View style={styles.groupInfoContainer}>
-        <Text style={styles.homeSectionTitle}>Chama Circle Hub</Text>
+        <Text style={[styles.homeSectionTitle, { color: themeTextColor }]}>Chama Circle Hub</Text>
         <View style={styles.groupInfoCard}>
           <View style={styles.groupInfoStatRow}>
             <View style={styles.groupStatBox}>
@@ -639,7 +646,7 @@ export default function HomeTab() {
 
       {/* 9. DECENTRALIZED WALLET STATUS */}
       <View style={styles.walletWidgetContainer}>
-        <Text style={styles.homeSectionTitle}>Decentralized Wallet Status</Text>
+        <Text style={[styles.homeSectionTitle, { color: themeTextColor }]}>Decentralized Wallet Status</Text>
         <View style={styles.walletWidgetCard}>
           <View style={styles.walletWidgetHeader}>
             <Text style={styles.walletWidgetProviderText}>🦊 MetaMask Ledger Identity</Text>

@@ -18,14 +18,7 @@ export default function Members() {
   );
 
   return (
-    <ScrollView style={styles.tabContentLight}>
-      <View style={styles.subScreenHeader}>
-        <TouchableOpacity onPress={() => setActiveSubScreen(null)} style={styles.backButton}>
-          <Text style={styles.backButtonText}>←</Text>
-        </TouchableOpacity>
-        <Text style={styles.subScreenTitle}>Members</Text>
-        <View style={{ width: 40 }} />
-      </View>
+    <ScrollView style={[styles.tabContentLight, { paddingTop: 16 }]} showsVerticalScrollIndicator={false}>
 
       <View style={styles.searchBarBox}>
         <TextInput

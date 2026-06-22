@@ -231,7 +231,14 @@ export const AppProvider = ({ children }) => {
       dob: user.dob || "12 Aug 1990",
       county: user.county || "",
       gender: user.gender || "Not Specified",
-      pushToken: user.push_token || user.pushToken || null
+      pushToken: user.push_token || user.pushToken || null,
+      nationalId: user.national_id || user.nationalId || "",
+      id_document_front: user.id_document_front || "",
+      id_document_back: user.id_document_back || "",
+      selfie: user.selfie || "",
+      physical_address: user.physical_address || user.address || "",
+      is_email_verified: user.is_email_verified !== undefined ? user.is_email_verified : false,
+      verification_level: user.verification_level || "BASIC"
     };
   };
 
@@ -457,7 +464,17 @@ export const AppProvider = ({ children }) => {
       register_subtitle: "Register to start saving and lending",
       back_welcome: "Back to Welcome",
       forgot_pin: "Forgot PIN?",
-      auto_fetch_otp: "Auto-Fetch OTP (Sandbox)"
+      auto_fetch_otp: "Auto-Fetch OTP (Sandbox)",
+      active_workspace: "Active Workspace",
+      id_document: "ID Document",
+      selfie: "Selfie (Face Verification)",
+      completeness: "Account Completeness",
+      system_settings: "System Settings",
+      change_pin: "Change PIN",
+      biometric_setup: "Biometrics Setup",
+      connect_metamask: "Connect MetaMask Wallet",
+      setup_6digit_pin: "Setup 6-Digit PIN",
+      physical_address: "Physical Address"
     },
     Kiswahili: {
       more: "Zaidi",
@@ -543,7 +560,17 @@ export const AppProvider = ({ children }) => {
       register_subtitle: "Sajili ili uanze kuweka akiba na kukopa",
       back_welcome: "Rudi Mwanzo",
       forgot_pin: "Umesahau PIN?",
-      auto_fetch_otp: "Chukua OTP Otomatiki (Sandbox)"
+      auto_fetch_otp: "Chukua OTP Otomatiki (Sandbox)",
+      active_workspace: "Eneo Kazi Ambalo Liko Wazi",
+      id_document: "Nyaraka ya Kitambulisho",
+      selfie: "Picha ya Selfie (Uthibitisho wa Sura)",
+      completeness: "Ukamilifu wa Akaunti",
+      system_settings: "Mipangilio ya Mfumo",
+      change_pin: "Badilisha PIN",
+      biometric_setup: "Usanidi wa Alama za Vidole",
+      connect_metamask: "Unganisha Mkoba wa MetaMask",
+      setup_6digit_pin: "Sanidi PIN ya Tarakimu 6",
+      physical_address: "Anwani ya Makazi"
     }
   };
   
@@ -595,10 +622,14 @@ export const AppProvider = ({ children }) => {
     } else if (key === "biometric") {
       if (selectedUser) {
         setIsLoading(true);
-        fetchUserData(selectedUser.email).then(() => {
+        fetchUserData(selectedUser.email).then((userObj) => {
           setIsLoading(false);
           setPinCode("");
-          setCurrentScreen("dashboard");
+          if (userObj && userObj.verification_level !== "FULLY_VERIFIED") {
+            setCurrentScreen("completeProfile");
+          } else {
+            setCurrentScreen("dashboard");
+          }
           showBanner("Biometric identity verified!", "success");
         });
       } else {
@@ -635,10 +666,14 @@ export const AppProvider = ({ children }) => {
                 }
               }
             } else {
-              if (selectedUser && newPin === selectedUser.pin) {
-                await fetchUserData(selectedUser.email);
+              if (selectedUser && (newPin === selectedUser.pin || selectedUser.isMetaMask)) {
+                const userObj = await fetchUserData(selectedUser.email) || selectedUser;
                 setIsLoading(false);
-                setCurrentScreen("dashboard");
+                if (userObj && userObj.verification_level !== "FULLY_VERIFIED") {
+                  setCurrentScreen("completeProfile");
+                } else {
+                  setCurrentScreen("dashboard");
+                }
                 showBanner("Access granted!", "success");
               } else {
                 setIsLoading(false);
@@ -960,6 +995,7 @@ export const AppProvider = ({ children }) => {
       }
 
       setIsLoading(false);
+      return mappedUser;
     } catch (error) {
       setIsLoading(false);
       showBanner("Failed to synchronize data with database", "error");
@@ -1079,6 +1115,13 @@ export const AppProvider = ({ children }) => {
   const [securityPinToggle, setSecurityPinToggle] = useState(true);
   const [securityBiometricToggle, setSecurityBiometricToggle] = useState(true);
   const [appearanceTheme, setAppearanceTheme] = useState("Light"); 
+  const [appearanceFontSize, setAppearanceFontSize] = useState("Standard");
+
+  const getFontSize = (baseSize) => {
+    if (appearanceFontSize === "Large") return baseSize * 1.25;
+    if (appearanceFontSize === "Extra Large") return baseSize * 1.5;
+    return baseSize;
+  };
 
   const isDark = appearanceTheme === "Dark";
   const themeBg = isDark ? "#0F172A" : "#F9FAFB";
@@ -1141,11 +1184,15 @@ export const AppProvider = ({ children }) => {
     
     if (user && (loginPassword === user.pin || loginPassword === "123456" || loginPassword === user.password)) {
       setSelectedUser(user);
-      await fetchUserData(user.email);
+      const userObj = await fetchUserData(user.email);
       setIsLoading(false);
       setLoginEmail("");
       setLoginPassword("");
-      setCurrentScreen("dashboard");
+      if (userObj && userObj.verification_level === "BASIC") {
+        setCurrentScreen("completeProfile");
+      } else {
+        setCurrentScreen("dashboard");
+      }
       showBanner("Access granted!", "success");
     } else {
       setIsLoading(false);
@@ -1156,22 +1203,22 @@ export const AppProvider = ({ children }) => {
   // Stepper Registration Handlers
   const handleRegisterNext = async () => {
     if (regStep === 1) {
-      if (!regName || !regNationalId || !regPhone || !regEmail) {
-        showBanner("Please fill in all personal details.", "error");
-        return;
-      }
-      setRegStep(2);
-    } else if (regStep === 2) {
-      if (!regPassword || !regConfirmPassword || !createdPin) {
-        showBanner("Please set up your password and PIN.", "error");
+      if (!regEmail || !regPhone || !regPassword || !regConfirmPassword) {
+        showBanner("Please fill in all details.", "error");
         return;
       }
       if (regPassword !== regConfirmPassword) {
         showBanner("Passwords do not match.", "error");
         return;
       }
-      if (createdPin.length !== 4) {
-        showBanner("PIN must be exactly 4 digits.", "error");
+      setRegStep(2);
+    } else if (regStep === 2) {
+      if (groupSetupChoice === "join" && !inviteCode) {
+        showBanner("Please enter a Chama invitation code.", "error");
+        return;
+      }
+      if (groupSetupChoice === "create" && !createdGroupName) {
+        showBanner("Please enter a Chama name.", "error");
         return;
       }
       setRegStep(3);
@@ -1179,21 +1226,29 @@ export const AppProvider = ({ children }) => {
   };
 
   const handleCompleteRegister = async () => {
+    if (!createdPin) {
+      showBanner("Please set up your security PIN.", "error");
+      return;
+    }
+    if (createdPin.length !== 6) {
+      showBanner("PIN must be exactly 6 digits.", "error");
+      return;
+    }
     setIsLoading(true);
     try {
       const newUser = {
         email: regEmail,
-        name: regName,
+        name: regEmail.split("@")[0].toUpperCase(),
         phone: regPhone,
-        pin: createdPin || regPassword,
+        pin: createdPin,
         avatar: profAvatarUri || "👤",
-        gender: profGender || "Male",
+        gender: "Not Specified",
         maritalStatus: "Single",
-        occupation: "Entrepreneur",
-        dob: profDob || "12 Aug 1990",
-        county: profCounty || "Nairobi",
+        occupation: "Not Specified",
+        dob: "Not Specified",
+        county: "Not Specified",
         bio: `Active Member of Chama ${createdGroupName || chamaName}`,
-        nationalId: regNationalId,
+        nationalId: "",
         referralCode: regReferral,
         walletAddress: connectedWalletAddress || undefined
       };
@@ -1272,14 +1327,14 @@ export const AppProvider = ({ children }) => {
       } catch (fetchErr) {
         console.log("fetchUserData after registration failed:", fetchErr.message);
         setSelectedUser({
-          name: regName,
+          name: regEmail.split("@")[0].toUpperCase(),
           email: regEmail,
           phone: regPhone,
           bio: `Active Member`,
-          occupation: "Entrepreneur",
-          dob: profDob || "12 Aug 1990",
-          county: profCounty || "Nairobi",
-          gender: profGender || "Male",
+          occupation: "Not Specified",
+          dob: "Not Specified",
+          county: "Not Specified",
+          gender: "Not Specified",
           maritalStatus: "Single",
           avatar: profAvatarUri || "👤",
           address: connectedWalletAddress || "0x0000000000000000000000000000000000000000",
@@ -1287,17 +1342,18 @@ export const AppProvider = ({ children }) => {
           savings: 0,
           activeLoan: 0,
           creditScore: 500,
-          loopPoints: 0
+          loopPoints: 0,
+          verification_level: "UNVERIFIED"
         });
       }
 
       setIsLoading(false);
-      setCurrentScreen("dashboard");
+      setCurrentScreen("pin"); // Redirect to PIN screen
       setRegStep(1); 
       Alert.alert(
         "Welcome to PayLoop!",
-        `Your account has been successfully created.\n\nEnjoy saving and lending within secure group workspaces.`,
-        [{ text: "Let's Go!", style: "default" }]
+        `Your account has been successfully created.\n\nPlease enter your new 6-digit PIN to log in.`,
+        [{ text: "Continue", style: "default" }]
       );
     } catch (error) {
       setIsLoading(false);
@@ -1314,6 +1370,14 @@ export const AppProvider = ({ children }) => {
   const [editMarital, setEditMarital] = useState("");
   const [editAvatarUri, setEditAvatarUri] = useState("");
   const [showAvatarPicker, setShowAvatarPicker] = useState(false);
+  const [editOccupation, setEditOccupation] = useState("");
+  const [editDob, setEditDob] = useState("");
+  const [editGender, setEditGender] = useState("");
+  const [editCounty, setEditCounty] = useState("");
+  const [editAddress, setEditAddress] = useState("");
+  const [editNationalId, setEditNationalId] = useState("");
+  const [editIdDocument, setEditIdDocument] = useState("");
+  const [editSelfie, setEditSelfie] = useState("");
 
   // MetaMask modal signature simulation states
   const [showMetaMaskModal, setShowMetaMaskModal] = useState(false);
@@ -1340,18 +1404,27 @@ export const AppProvider = ({ children }) => {
 
   // Open Edit Profile
   const openEditProfile = () => {
-    setEditName(selectedUser.name);
-    setEditEmail(selectedUser.email);
-    setEditPhone(selectedUser.phone);
-    setEditBio(selectedUser.bio);
-    setEditMarital(selectedUser.maritalStatus);
+    setEditName(selectedUser.name || "");
+    setEditEmail(selectedUser.email || "");
+    setEditPhone(selectedUser.phone || "");
+    setEditBio(selectedUser.bio || "");
+    setEditMarital(selectedUser.maritalStatus || "");
     setEditAvatarUri(selectedUser.avatarUri || "");
+    setEditOccupation(selectedUser.occupation || "");
+    setEditDob(selectedUser.dob || "");
+    setEditGender(selectedUser.gender || "");
+    setEditCounty(selectedUser.county || "");
+    setEditAddress(selectedUser.address || "");
+    setEditNationalId(selectedUser.nationalId || "");
+    setEditIdDocument(selectedUser.id_document || "");
+    setEditSelfie(selectedUser.selfie || "");
     setActiveSubScreen("editProfile");
   };
 
   // Save Edit Profile
   const handleSaveProfile = async () => {
     setIsLoading(true);
+    const finalVerificationLevel = (editIdDocument && editSelfie) ? "FULLY_VERIFIED" : "UNVERIFIED";
     try {
       const response = await fetchWithTimeout(`${BACKEND_URL}/api/users/update-profile`, {
         method: "POST",
@@ -1362,7 +1435,16 @@ export const AppProvider = ({ children }) => {
           phone: editPhone,
           bio: editBio,
           maritalStatus: editMarital,
-          avatar: editAvatarUri || selectedUser.avatar
+          avatar: editAvatarUri || selectedUser.avatar,
+          occupation: editOccupation,
+          dob: editDob,
+          gender: editGender,
+          county: editCounty,
+          address: editAddress,
+          nationalId: editNationalId,
+          id_document: editIdDocument,
+          selfie: editSelfie,
+          verification_level: finalVerificationLevel
         })
       });
       const data = await response.json();
@@ -1375,10 +1457,23 @@ export const AppProvider = ({ children }) => {
           bio: editBio,
           maritalStatus: editMarital,
           avatarUri: editAvatarUri || prev.avatarUri,
-          avatar: editAvatarUri || prev.avatar
+          avatar: editAvatarUri || prev.avatar,
+          occupation: editOccupation,
+          dob: editDob,
+          gender: editGender,
+          county: editCounty,
+          address: editAddress,
+          nationalId: editNationalId,
+          id_document: editIdDocument,
+          selfie: editSelfie,
+          verification_level: finalVerificationLevel
         }));
         showBanner("Profile updated successfully!", "success");
-        setActiveSubScreen("profile");
+        if (finalVerificationLevel === "FULLY_VERIFIED") {
+          setActiveSubScreen(null);
+        } else {
+          setActiveSubScreen("profile");
+        }
       } else {
         showBanner(data.error || "Failed to update profile", "error");
       }
@@ -1391,10 +1486,23 @@ export const AppProvider = ({ children }) => {
         bio: editBio,
         maritalStatus: editMarital,
         avatarUri: editAvatarUri || prev.avatarUri,
-        avatar: editAvatarUri || prev.avatar
+        avatar: editAvatarUri || prev.avatar,
+        occupation: editOccupation,
+        dob: editDob,
+        gender: editGender,
+        county: editCounty,
+        address: editAddress,
+        nationalId: editNationalId,
+        id_document: editIdDocument,
+        selfie: editSelfie,
+        verification_level: finalVerificationLevel
       }));
       showBanner("Profile saved locally (offline mode)", "info");
-      setActiveSubScreen("profile");
+      if (finalVerificationLevel === "FULLY_VERIFIED") {
+        setActiveSubScreen(null);
+      } else {
+        setActiveSubScreen("profile");
+      }
     }
   };
 
@@ -1801,7 +1909,9 @@ export const AppProvider = ({ children }) => {
         connectedWalletAddress, setConnectedWalletAddress,
         isDark, themeBg, themeCardBg, themeTextColor, themeBorderColor, themeSubtitleColor, themeHeaderBg, themeDividerColor,
         appearanceLanguage, setAppearanceLanguage, t, onboardingSlides, handleOnboardingNext, handlePinPress,
+        appearanceFontSize, setAppearanceFontSize, getFontSize,
         editName, setEditName, editEmail, setEditEmail, editPhone, setEditPhone, editBio, setEditBio, editMarital, setEditMarital, editAvatarUri, setEditAvatarUri, showAvatarPicker, setShowAvatarPicker,
+        editOccupation, setEditOccupation, editDob, setEditDob, editGender, setEditGender, editCounty, setEditCounty, editAddress, setEditAddress, editNationalId, setEditNationalId, editIdDocument, setEditIdDocument, editSelfie, setEditSelfie,
         showMetaMaskModal, setShowMetaMaskModal, txDetails, setTxDetails, onConfirmTx, setOnConfirmTx, requestSignature, handleMetaMaskConfirm,
         showStkModal, setShowStkModal, stkPinCode, setStkPinCode, stkPayDetails, setStkPayDetails,
         showReceiptModal, setShowReceiptModal, receiptDetails, setReceiptDetails, launchDigitalReceipt, handleShareReceipt,

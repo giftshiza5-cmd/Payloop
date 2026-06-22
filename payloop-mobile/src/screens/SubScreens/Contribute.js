@@ -19,14 +19,7 @@ export default function Contribute() {
   const amounts = currency === "KES" ? ["5,000", "10,000", "20,000", "50,000"] : ["50", "100", "200", "500"];
 
   return (
-    <ScrollView style={styles.tabContentLight}>
-      <View style={styles.subScreenHeader}>
-        <TouchableOpacity onPress={() => setActiveSubScreen(null)} style={styles.backButton}>
-          <Text style={styles.backButtonText}>←</Text>
-        </TouchableOpacity>
-        <Text style={styles.subScreenTitle}>Make Contribution</Text>
-        <View style={{ width: 40 }} />
-      </View>
+    <ScrollView style={[styles.tabContentLight, { paddingTop: 16 }]} showsVerticalScrollIndicator={false}>
 
       <View style={styles.contributionFormCard}>
         <Text style={styles.inputLabelLabel}>Amount in {currency}</Text>

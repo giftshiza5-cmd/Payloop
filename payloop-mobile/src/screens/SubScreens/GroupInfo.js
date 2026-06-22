@@ -17,14 +17,7 @@ export default function GroupInfo() {
   } = useApp();
 
   return (
-    <ScrollView style={[styles.tabContentLight, { backgroundColor: themeBg }]} showsVerticalScrollIndicator={false}>
-      <View style={styles.subScreenHeader}>
-        <TouchableOpacity onPress={() => setActiveSubScreen(null)} style={[styles.backButton, { backgroundColor: themeCardBg, borderColor: themeBorderColor }]}>
-          <Text style={[styles.backButtonText, { color: themeTextColor }]}>←</Text>
-        </TouchableOpacity>
-        <Text style={[styles.subScreenTitle, { color: themeTextColor }]}>Group Information</Text>
-        <View style={{ width: 40 }} />
-      </View>
+    <ScrollView style={[styles.tabContentLight, { backgroundColor: themeBg, paddingTop: 16 }]} showsVerticalScrollIndicator={false}>
 
       <View style={[styles.detailCardBox, { backgroundColor: themeCardBg, borderColor: themeBorderColor }]}>
         <Text style={[styles.detailCardHeader, { color: themeTextColor }]}>Green Savers Circle</Text>

@@ -15,19 +15,14 @@ export default function AccountDetails() {
   } = useApp();
 
   return (
-    <ScrollView style={[styles.tabContentLight, { backgroundColor: themeBg }]} showsVerticalScrollIndicator={false}>
-      <View style={styles.subScreenHeader}>
-        <TouchableOpacity onPress={() => setActiveSubScreen(null)} style={[styles.backButton, { backgroundColor: themeCardBg, borderColor: themeBorderColor }]}>
-          <Text style={[styles.backButtonText, { color: themeTextColor }]}>←</Text>
-        </TouchableOpacity>
-        <Text style={[styles.subScreenTitle, { color: themeTextColor }]}>Account Information</Text>
-        <TouchableOpacity onPress={() => setActiveSubScreen("editProfile")} style={[styles.headerActionButton, { backgroundColor: themeCardBg, borderColor: themeBorderColor }]}>
-          <Text style={styles.headerActionButtonText}>Edit</Text>
-        </TouchableOpacity>
-      </View>
-
+    <ScrollView style={[styles.tabContentLight, { backgroundColor: themeBg, paddingTop: 16 }]} showsVerticalScrollIndicator={false}>
       <View style={[styles.detailCardBox, { backgroundColor: themeCardBg, borderColor: themeBorderColor }]}>
-        <Text style={[styles.detailCardHeader, { color: themeTextColor }]}>Identity Profile</Text>
+        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+          <Text style={[styles.detailCardHeader, { color: themeTextColor, marginBottom: 0 }]}>Identity Profile</Text>
+          <TouchableOpacity onPress={() => setActiveSubScreen("editProfile")} style={{ backgroundColor: "#0F9D58", paddingHorizontal: 10, paddingVertical: 4, borderRadius: 6 }}>
+            <Text style={{ color: "#FFF", fontSize: 11, fontWeight: "700" }}>Edit</Text>
+          </TouchableOpacity>
+        </View>
 
         <View style={[styles.detailItemRow, { borderColor: themeBorderColor }]}>
           <Text style={[styles.detailLabel, { color: themeSubtitleColor }]}>Full Name</Text>

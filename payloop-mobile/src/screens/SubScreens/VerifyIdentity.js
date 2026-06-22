@@ -146,21 +146,10 @@ export default function VerifyIdentity() {
 
   return (
     <ScrollView
-      style={[styles.tabContentLight, { backgroundColor: themeBg }]}
+      style={[styles.tabContentLight, { backgroundColor: themeBg, paddingTop: 16 }]}
       contentContainerStyle={{ paddingBottom: 60 }}
       showsVerticalScrollIndicator={false}
     >
-      {/* Header */}
-      <View style={styles.subScreenHeader}>
-        <TouchableOpacity
-          onPress={() => setActiveSubScreen(null)}
-          style={[styles.backButton, { backgroundColor: themeCardBg, borderColor: themeBorderColor }]}
-        >
-          <Text style={[styles.backButtonText, { color: themeTextColor }]}>←</Text>
-        </TouchableOpacity>
-        <Text style={[styles.subScreenTitle, { color: themeTextColor }]}>Identity Verification</Text>
-        <View style={{ width: 40 }} />
-      </View>
 
       {/* Progress Steps Bar */}
       <View style={{

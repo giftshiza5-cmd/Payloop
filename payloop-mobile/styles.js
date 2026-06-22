@@ -855,8 +855,6 @@ export const styles = StyleSheet.create({
 
   // BOTTOM TAB BAR
   bottomTabBar: {
-    position: "absolute",
-    bottom: 0,
     flexDirection: "row",
     backgroundColor: "#ffffff",
     borderTopWidth: 1,
@@ -2419,13 +2417,13 @@ export const styles = StyleSheet.create({
   topBarContainer: {
     paddingTop: STATUS_BAR_HEIGHT,
     height: 64 + STATUS_BAR_HEIGHT,
-    backgroundColor: "#0B251C", // Deep forest green for high contrast
+    backgroundColor: "#0F9D58", // Consistent brand green
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 16,
     borderBottomWidth: 1.5,
-    borderBottomColor: "#051A13",
+    borderBottomColor: "#0B874C",
     elevation: 4,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -2677,12 +2675,16 @@ export const styles = StyleSheet.create({
     marginBottom: 16
   },
   homeSectionTitle: {
-    fontSize: 14,
-    fontWeight: "800",
+    fontSize: 15,
+    fontWeight: "900",
     color: "#1E293B",
-    marginBottom: 10,
+    marginBottom: 12,
+    marginTop: 8,
     textTransform: "uppercase",
-    letterSpacing: 0.5
+    letterSpacing: 0.8,
+    borderLeftWidth: 4,
+    borderLeftColor: "#0F9D58",
+    paddingLeft: 8
   },
   quickActionsGrid: {
     flexDirection: "row",
@@ -3402,12 +3404,16 @@ export const styles = StyleSheet.create({
     marginBottom: 10
   },
   savingsSectionTitle: {
-    fontSize: 14,
-    fontWeight: "800",
+    fontSize: 15,
+    fontWeight: "900",
     color: "#1E293B",
     textTransform: "uppercase",
-    letterSpacing: 0.5,
-    marginBottom: 8
+    letterSpacing: 0.8,
+    marginBottom: 12,
+    marginTop: 8,
+    borderLeftWidth: 4,
+    borderLeftColor: "#0F9D58",
+    paddingLeft: 8
   },
   savingsAddGoalBtn: {
     backgroundColor: "rgba(15, 157, 88, 0.08)",
@@ -4150,10 +4156,16 @@ export const styles = StyleSheet.create({
     marginBottom: 16
   },
   consensusSectionTitle: {
-    fontSize: 13,
-    fontWeight: "800",
+    fontSize: 15,
+    fontWeight: "900",
     color: "#1E293B",
-    marginBottom: 12
+    textTransform: "uppercase",
+    letterSpacing: 0.8,
+    marginBottom: 12,
+    marginTop: 8,
+    borderLeftWidth: 4,
+    borderLeftColor: "#0F9D58",
+    paddingLeft: 8
   },
   consensusEmptyText: {
     fontSize: 11,
@@ -4207,10 +4219,16 @@ export const styles = StyleSheet.create({
     marginBottom: 16
   },
   loanHistoryTitle: {
-    fontSize: 13,
-    fontWeight: "800",
+    fontSize: 15,
+    fontWeight: "900",
     color: "#1E293B",
-    marginBottom: 12
+    textTransform: "uppercase",
+    letterSpacing: 0.8,
+    marginBottom: 12,
+    marginTop: 8,
+    borderLeftWidth: 4,
+    borderLeftColor: "#0F9D58",
+    paddingLeft: 8
   },
   historyFilterScrollPills: {
     flexDirection: "row",
@@ -4299,10 +4317,16 @@ export const styles = StyleSheet.create({
     borderColor: "#E2E8F0"
   },
   creditImpactTitle: {
-    fontSize: 12,
-    fontWeight: "800",
-    color: "#334155",
-    marginBottom: 6
+    fontSize: 15,
+    fontWeight: "900",
+    color: "#1E293B",
+    textTransform: "uppercase",
+    letterSpacing: 0.8,
+    marginBottom: 12,
+    marginTop: 8,
+    borderLeftWidth: 4,
+    borderLeftColor: "#0F9D58",
+    paddingLeft: 8
   },
   creditImpactDesc: {
     fontSize: 11,
@@ -4313,10 +4337,16 @@ export const styles = StyleSheet.create({
     marginBottom: 20
   },
   tipsSectionTitle: {
-    fontSize: 13,
-    fontWeight: "800",
+    fontSize: 15,
+    fontWeight: "900",
     color: "#1E293B",
-    marginBottom: 10
+    textTransform: "uppercase",
+    letterSpacing: 0.8,
+    marginBottom: 12,
+    marginTop: 8,
+    borderLeftWidth: 4,
+    borderLeftColor: "#0F9D58",
+    paddingLeft: 8
   },
   tipsScrollContainer: {
     flexDirection: "row"
@@ -4533,10 +4563,16 @@ export const styles = StyleSheet.create({
     marginBottom: 16
   },
   achievementsSectionTitle: {
-    fontSize: 13,
-    fontWeight: "800",
+    fontSize: 15,
+    fontWeight: "900",
     color: "#1E293B",
-    marginBottom: 12
+    textTransform: "uppercase",
+    letterSpacing: 0.8,
+    marginBottom: 12,
+    marginTop: 8,
+    borderLeftWidth: 4,
+    borderLeftColor: "#0F9D58",
+    paddingLeft: 8
   },
   achievementsGridRowContainer: {
     flexDirection: "row",
@@ -4609,10 +4645,16 @@ export const styles = StyleSheet.create({
     marginBottom: 16
   },
   benefitsSectionTitle: {
-    fontSize: 13,
-    fontWeight: "800",
+    fontSize: 15,
+    fontWeight: "900",
     color: "#1E293B",
-    marginBottom: 12
+    textTransform: "uppercase",
+    letterSpacing: 0.8,
+    marginBottom: 12,
+    marginTop: 8,
+    borderLeftWidth: 4,
+    borderLeftColor: "#0F9D58",
+    paddingLeft: 8
   },
   benefitsTierListItem: {
     flexDirection: "row",
@@ -4666,10 +4708,16 @@ export const styles = StyleSheet.create({
     marginBottom: 16
   },
   recommendationsBoxTitle: {
-    fontSize: 13,
-    fontWeight: "800",
+    fontSize: 15,
+    fontWeight: "900",
     color: "#1E293B",
-    marginBottom: 12
+    textTransform: "uppercase",
+    letterSpacing: 0.8,
+    marginBottom: 12,
+    marginTop: 8,
+    borderLeftWidth: 4,
+    borderLeftColor: "#0F9D58",
+    paddingLeft: 8
   },
   recommendationItemBox: {
     flexDirection: "row",
@@ -4733,10 +4781,28 @@ export const styles = StyleSheet.create({
     marginBottom: 20
   },
   activitiesSectionTitle: {
-    fontSize: 13,
-    fontWeight: "800",
+    fontSize: 15,
+    fontWeight: "900",
     color: "#1E293B",
-    marginBottom: 12
+    textTransform: "uppercase",
+    letterSpacing: 0.8,
+    marginBottom: 12,
+    marginTop: 8,
+    borderLeftWidth: 4,
+    borderLeftColor: "#0F9D58",
+    paddingLeft: 8
+  },
+  qrCodeScannerValidationCardTitle: {
+    fontSize: 15,
+    fontWeight: "900",
+    color: "#1E293B",
+    textTransform: "uppercase",
+    letterSpacing: 0.8,
+    marginBottom: 12,
+    marginTop: 8,
+    borderLeftWidth: 4,
+    borderLeftColor: "#0F9D58",
+    paddingLeft: 8
   },
   activityRowLogItem: {
     flexDirection: "row",

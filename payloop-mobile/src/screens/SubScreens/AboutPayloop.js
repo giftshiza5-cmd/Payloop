@@ -16,14 +16,7 @@ export default function AboutPayloop() {
   } = useApp();
 
   return (
-    <ScrollView style={[styles.tabContentLight, { backgroundColor: themeBg }]} showsVerticalScrollIndicator={false}>
-      <View style={styles.subScreenHeader}>
-        <TouchableOpacity onPress={() => setActiveSubScreen(null)} style={[styles.backButton, { backgroundColor: themeCardBg, borderColor: themeBorderColor }]}>
-          <Text style={[styles.backButtonText, { color: themeTextColor }]}>←</Text>
-        </TouchableOpacity>
-        <Text style={[styles.subScreenTitle, { color: themeTextColor }]}>About PayLoop</Text>
-        <View style={{ width: 40 }} />
-      </View>
+    <ScrollView style={[styles.tabContentLight, { backgroundColor: themeBg, paddingTop: 16 }]} showsVerticalScrollIndicator={false}>
 
       <View style={[styles.aboutPlatformCardBox, { backgroundColor: themeCardBg, borderColor: themeBorderColor }]}>
         <View style={[styles.aboutLogoCircle, { backgroundColor: isDark ? "#0F172A" : "rgba(15, 157, 88,0.08)" }]}>

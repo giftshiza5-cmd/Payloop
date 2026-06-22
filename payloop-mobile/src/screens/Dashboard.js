@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { CameraView } from "expo-camera";
+import Svg, { Path, Rect, Circle } from "react-native-svg";
 import { useApp } from "../context/AppContext";
 import { styles } from "../../styles";
 
@@ -127,6 +128,13 @@ export default function Dashboard() {
     formatValue
   } = useApp();
 
+  React.useEffect(() => {
+    if (selectedUser && selectedUser.verification_level !== "FULLY_VERIFIED") {
+      setActiveTab("more");
+      setActiveSubScreen("editProfile");
+    }
+  }, [selectedUser?.verification_level]);
+
   const getTimeGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return "Good Morning";
@@ -184,14 +192,161 @@ export default function Dashboard() {
     }
   };
 
+  const renderTabIcon = (key, isActive, baseColor) => {
+    const activeColor = "#0F9D58";
+    const color = isActive ? activeColor : baseColor;
+    const strokeWidth = 2;
+
+    switch (key) {
+      case "home":
+        if (isActive) {
+          return (
+            <Svg width={22} height={22} viewBox="0 0 24 24">
+              <Path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill={activeColor} />
+            </Svg>
+          );
+        } else {
+          return (
+            <Svg width={22} height={22} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth}>
+              <Path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-4v-6a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v6H5a1 1 0 0 1-1-1V9.5z" strokeLinecap="round" strokeLinejoin="round" />
+            </Svg>
+          );
+        }
+      case "savings":
+        if (isActive) {
+          return (
+            <Svg width={22} height={22} viewBox="0 0 24 24" fill={activeColor}>
+              <Rect x={3} y={3} width={18} height={18} rx={4} />
+              <Circle cx={12} cy={12} r={3} fill="#ffffff" />
+            </Svg>
+          );
+        } else {
+          return (
+            <Svg width={22} height={22} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth}>
+              <Rect x={3} y={3} width={18} height={18} rx={4} strokeLinecap="round" strokeLinejoin="round" />
+              <Circle cx={12} cy={12} r={3} strokeLinecap="round" strokeLinejoin="round" />
+            </Svg>
+          );
+        }
+      case "loans":
+        if (isActive) {
+          return (
+            <Svg width={22} height={22} viewBox="0 0 24 24" fill={activeColor}>
+              <Rect x={2} y={5} width={20} height={14} rx={3} />
+              <Rect x={2} y={9} width={20} height={3} fill="#ffffff" opacity={0.3} />
+              <Circle cx={6} cy={14} r={1.5} fill="#ffffff" />
+            </Svg>
+          );
+        } else {
+          return (
+            <Svg width={22} height={22} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth}>
+              <Rect x={2} y={5} width={20} height={14} rx={3} strokeLinecap="round" strokeLinejoin="round" />
+              <Path d="M2 10h20" strokeLinecap="round" strokeLinejoin="round" />
+              <Circle cx={6} cy={14} r={1} fill={color} />
+            </Svg>
+          );
+        }
+      case "score":
+        if (isActive) {
+          return (
+            <Svg width={22} height={22} viewBox="0 0 24 24" fill="none" stroke={activeColor} strokeWidth={3}>
+              <Path d="M3 18a9 9 0 1 1 18 0" strokeLinecap="round" />
+              <Path d="M12 18l-4-5" strokeLinecap="round" />
+            </Svg>
+          );
+        } else {
+          return (
+            <Svg width={22} height={22} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth}>
+              <Path d="M3 18a9 9 0 1 1 18 0" strokeLinecap="round" strokeLinejoin="round" />
+              <Path d="M12 18l-4-5" strokeLinecap="round" strokeLinejoin="round" />
+            </Svg>
+          );
+        }
+      case "more":
+        if (isActive) {
+          return (
+            <Svg width={22} height={22} viewBox="0 0 24 24" fill={activeColor}>
+              <Rect x={3} y={3} width={7} height={7} rx={1.5} />
+              <Rect x={14} y={3} width={7} height={7} rx={1.5} />
+              <Rect x={3} y={14} width={7} height={7} rx={1.5} />
+              <Rect x={14} y={14} width={7} height={7} rx={1.5} />
+            </Svg>
+          );
+        } else {
+          return (
+            <Svg width={22} height={22} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth}>
+              <Rect x={3} y={3} width={7} height={7} rx={1.5} strokeLinecap="round" strokeLinejoin="round" />
+              <Rect x={14} y={3} width={7} height={7} rx={1.5} strokeLinecap="round" strokeLinejoin="round" />
+              <Rect x={3} y={14} width={7} height={7} rx={1.5} strokeLinecap="round" strokeLinejoin="round" />
+              <Rect x={14} y={14} width={7} height={7} rx={1.5} strokeLinecap="round" strokeLinejoin="round" />
+            </Svg>
+          );
+        }
+      default:
+        return null;
+    }
+  };
+
+  const getSubScreenTitle = () => {
+    switch (activeSubScreen) {
+      case "adminDashboard": return "Admin Dashboard";
+      case "adminApprovals": return "Approvals Center";
+      case "adminFinancialRules":
+      case "groupSettings": return "Financial Controls";
+      case "adminLoanManagement":
+      case "disbursement": return "Loan Management";
+      case "adminGovernance": return "Governance & Voting";
+      case "adminSecurity": return "Security & Audit Logs";
+      case "adminCommunication":
+      case "announcements": return "Communication Hub";
+      case "adminMemberManagement":
+      case "groupMembers": return "Members Management";
+      case "adminMeetings": return "Agendas & Meetings";
+      case "adminReports": return "Financial Reports";
+      case "superAdminPanel": return "Super Admin Panel";
+      case "groupInfo": return "Chama Details";
+      case "walletDetails": return "My Wallet";
+      case "accountDetails": return "Account Information";
+      case "securitySettings": return "Security Settings";
+      case "appearanceSettings": return "Appearance Settings";
+      case "announcementsFeed": return "Announcements";
+      case "aboutPayloop": return "About PayLoop";
+      case "helpCenter": return "Help & Support";
+      case "verifyIdentity": return "Identity Verification";
+      case "profile": return "My Profile";
+      case "editProfile": return "Edit Profile";
+      case "notifications": return "Notifications";
+      case "transactions": return "Transactions History";
+      case "members": return "Group Members";
+      case "contribute": return "Make Contribution";
+      case "ussd": return "USSD Simulator";
+      default: return "PayLoop";
+    }
+  };
+
   const renderTopBar = () => {
+    if (activeSubScreen !== null) {
+      const isUnverified = selectedUser?.verification_level !== "FULLY_VERIFIED";
+      return (
+        <View style={styles.topBarContainer}>
+          {!isUnverified && (
+            <TouchableOpacity
+              onPress={() => activeSubScreen === "editProfile" ? setActiveSubScreen("profile") : setActiveSubScreen(null)}
+              style={{ padding: 4, marginRight: 10 }}
+            >
+              <Text style={{ fontSize: 24, color: "#FFFFFF", fontWeight: "bold" }}>←</Text>
+            </TouchableOpacity>
+          )}
+          <Text style={{ fontSize: 16, fontWeight: "800", color: "#FFFFFF", flex: 1, textAlign: "center", marginRight: isUnverified ? 0 : 24 }}>
+            {getSubScreenTitle()}
+          </Text>
+        </View>
+      );
+    }
+
     return (
       <View style={styles.topBarContainer}>
         <View style={styles.topBarLeft}>
-          <TouchableOpacity onPress={() => setIsDrawerOpen(true)} style={{ marginRight: 10, padding: 4 }}>
-            <Text style={{ fontSize: 22, color: isDark ? "#FFFFFF" : "#1E293B" }}>☰</Text>
-          </TouchableOpacity>
-
           <TouchableOpacity onPress={() => setActiveSubScreen("profile")} style={styles.topBarAvatarBox}>
             {selectedUser?.avatarUri ? (
               <Image source={{ uri: selectedUser.avatarUri }} style={{ width: 32, height: 32, borderRadius: 16 }} />
@@ -222,15 +377,23 @@ export default function Dashboard() {
               <Text style={styles.topBarChamaText}>{chamaName}</Text>
               <View style={{
                 marginLeft: 6,
-                backgroundColor: currentGroupRole === "Admin" ? "rgba(15,157,88,0.15)" : "rgba(100,116,139,0.12)",
+                backgroundColor: "rgba(255, 255, 255, 0.2)",
                 borderRadius: 8, paddingHorizontal: 6, paddingVertical: 1,
-                borderWidth: 1, borderColor: currentGroupRole === "Admin" ? "#0F9D58" : "#94A3B8"
+                borderWidth: 1, borderColor: "rgba(255, 255, 255, 0.4)"
               }}>
-                <Text style={{ fontSize: 9, fontWeight: "700", color: currentGroupRole === "Admin" ? "#0F9D58" : "#94A3B8" }}>
+                <Text style={{ fontSize: 9, fontWeight: "700", color: "#FFFFFF" }}>
                   {currentGroupRole}
                 </Text>
               </View>
             </View>
+            {selectedUser?.isMetaMask && selectedUser?.address && (
+               <View style={{ flexDirection: "row", alignItems: "center", marginTop: 4, gap: 4 }}>
+                 <Text style={{ fontSize: 10 }}>🦊</Text>
+                 <Text style={{ color: "#FBBF24", fontSize: 10, fontWeight: "bold", letterSpacing: 0.5 }}>
+                   {selectedUser.address.slice(0, 6)}...{selectedUser.address.slice(-4)}
+                 </Text>
+               </View>
+            )}
           </View>
         </View>
         
@@ -240,10 +403,6 @@ export default function Dashboard() {
             style={styles.topBarCurrencyPill}
           >
             <Text style={styles.topBarCurrencyText}>{currency}</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => Alert.alert("Settings", "Simulating settings menu. Customize limits, notifications, and biometric login.")} style={styles.topBarIconBtn}>
-            <Text style={styles.topBarIconEmoji}>⚙️</Text>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => setActiveSubScreen("notifications")} style={styles.topBarIconBtn}>
@@ -432,20 +591,26 @@ export default function Dashboard() {
 
   return (
     <View style={{ flex: 1, backgroundColor: themeBg }}>
-      <StatusBar style={isDark ? "light" : "dark"} />
+      <StatusBar style="light" />
+      {renderTopBar()}
       
-      {activeSubScreen !== null ? (
-        renderActiveSubScreen()
-      ) : (
-        <View style={{ flex: 1 }}>
-          {renderTopBar()}
-          {isDashboardLoading ? renderSkeletonLoader() : renderActiveTab()}
-        </View>
-      )}
+      <View style={{ flex: 1 }}>
+        {activeSubScreen !== null ? (
+          renderActiveSubScreen()
+        ) : (
+          isDashboardLoading ? renderSkeletonLoader() : renderActiveTab()
+        )}
+      </View>
 
       {/* Bottom Navigation Bar */}
       {activeSubScreen === null && (
-        <View style={[styles.bottomTabBar, { paddingBottom: 6, paddingTop: 0, height: 58 }]}>
+        <View style={[styles.bottomTabBar, { 
+          paddingBottom: 8, 
+          paddingTop: 0, 
+          height: 64, 
+          backgroundColor: isDark ? "#0A0F1E" : "#ffffff", 
+          borderTopColor: isDark ? "#1F2937" : "#E5E7EB" 
+        }]}>
           {[
             { key: "home", label: "Home" },
             { key: "savings", label: "Savings" },
@@ -455,155 +620,46 @@ export default function Dashboard() {
           ].map((tab) => {
             const isActive = activeTab === tab.key;
             const isAdminTab = tab.key === "more" && currentGroupRole === "Admin";
+            const baseColor = isDark ? "#9CA3AF" : "#94A3B8";
             return (
               <TouchableOpacity
                 key={tab.key}
-                onPress={() => setActiveTab(tab.key)}
+                onPress={() => {
+                  if (selectedUser?.verification_level !== "FULLY_VERIFIED" && tab.key !== "more") {
+                    Alert.alert(
+                      "Verification Required 🔒",
+                      "Please complete your profile details and upload verification documents (ID & Selfie) in the profile editing section to unlock all features.",
+                      [{ text: "Complete Profile", onPress: () => { setActiveTab("more"); setActiveSubScreen("editProfile"); } }]
+                    );
+                    return;
+                  }
+                  setActiveTab(tab.key);
+                }}
                 style={{ flex: 1, alignItems: "center", justifyContent: "flex-start", paddingTop: 0 }}
                 activeOpacity={0.75}
               >
                 <View style={{
-                  height: 3, width: isActive ? "60%" : 0, borderRadius: 2,
+                  height: 3, width: isActive ? "65%" : 0, borderRadius: 2,
                   backgroundColor: "#0F9D58",
-                  marginBottom: 8
+                  marginBottom: 5
                 }} />
+                {renderTabIcon(tab.key, isActive, baseColor)}
                 <Text style={{
-                  fontSize: isActive ? 11.5 : 11,
+                  fontSize: isActive ? 10.5 : 10,
                   fontWeight: isActive ? "800" : "500",
-                  color: isActive ? "#0F9D58" : (isDark ? "#64748B" : "#94A3B8"),
-                  letterSpacing: isActive ? -0.2 : 0
+                  color: isActive ? "#0F9D58" : baseColor,
+                  letterSpacing: isActive ? -0.2 : 0,
+                  marginTop: 2
                 }}>
                   {tab.label}
                 </Text>
                 {isAdminTab && (
-                  <View style={{ width: 5, height: 5, borderRadius: 3, backgroundColor: "#FBBF24", position: "absolute", top: 6, right: "24%" }} />
+                  <View style={{ width: 5, height: 5, borderRadius: 3, backgroundColor: "#FBBF24", position: "absolute", top: 8, right: "22%" }} />
                 )}
               </TouchableOpacity>
             );
           })}
         </View>
-      )}
-
-      {/* Hamburger Drawer Overlay Menu Modal */}
-      {isDrawerOpen && (
-        <Modal visible={isDrawerOpen} transparent animationType="fade" onRequestClose={() => setIsDrawerOpen(false)}>
-          <View style={{ flex: 1, flexDirection: "row" }}>
-            <View style={{
-              width: 280, height: "100%",
-              backgroundColor: isDark ? "#0A0F1E" : "#FFFFFF",
-              borderRightWidth: 1.5, borderColor: isDark ? "#1F2937" : "#E5E7EB",
-              paddingTop: 56, paddingHorizontal: 20
-            }}>
-              <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 24, gap: 12 }}>
-                <View style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: isDark ? "#1F2937" : "#F3F4F6", alignItems: "center", justifyContent: "center" }}>
-                  {selectedUser?.avatarUri ? (
-                    <Image source={{ uri: selectedUser.avatarUri }} style={{ width: 48, height: 48, borderRadius: 24 }} />
-                  ) : (
-                    <Text style={{ fontSize: 24 }}>👤</Text>
-                  )}
-                </View>
-                <View style={{ flex: 1 }}>
-                  <Text style={{ fontSize: 16, fontWeight: "bold", color: themeTextColor }} numberOfLines={1}>
-                    {selectedUser?.name || "Guest"}
-                  </Text>
-                  <Text style={{ fontSize: 11, color: "#0F9D58", fontWeight: "700", marginTop: 2 }}>
-                    ⭐ Score: {selectedUser?.creditScore || 500}
-                  </Text>
-                </View>
-              </View>
-
-              {userGroups.length > 0 && (
-                <View style={{ marginBottom: 20 }}>
-                  <Text style={{ fontSize: 10, color: themeSubtitleColor, fontWeight: "bold", textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 6 }}>
-                    Active Workspace
-                  </Text>
-                  <ScrollView style={{ maxHeight: 120, borderWidth: 1, borderColor: themeBorderColor, borderRadius: 10, backgroundColor: isDark ? "#111827" : "#F8FAFC" }}>
-                    {userGroups.map((grp) => {
-                      const isSelected = currentGroup?.id === grp.id;
-                      return (
-                        <TouchableOpacity
-                          key={grp.id}
-                          onPress={async () => {
-                            setCurrentGroup(grp);
-                            await fetchGroupData(grp.id, selectedUser.email);
-                            setIsDrawerOpen(false);
-                            showBanner(`Switched to Chama: ${grp.name}`, "success");
-                          }}
-                          style={{
-                            padding: 10,
-                            flexDirection: "row", alignItems: "center", justifyContent: "space-between",
-                            backgroundColor: isSelected ? (isDark ? "rgba(15,157,88,0.15)" : "#E8F5E9") : "transparent",
-                            borderBottomWidth: 0.5, borderBottomColor: themeBorderColor
-                          }}
-                        >
-                          <Text style={{ fontSize: 12, fontWeight: isSelected ? "bold" : "normal", color: isSelected ? "#0F9D58" : themeTextColor }} numberOfLines={1}>
-                            {grp.name}
-                          </Text>
-                          {isSelected && <Text style={{ color: "#0F9D58", fontSize: 10 }}>✓</Text>}
-                        </TouchableOpacity>
-                      );
-                    })}
-                  </ScrollView>
-                </View>
-              )}
-
-              <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ gap: 4 }}>
-                {[
-                  { id: "dashboard", label: "Dashboard", emoji: "📊", action: () => { setCurrentScreen("dashboard"); setActiveTab("home"); setActiveSubScreen(null); } },
-                  { id: "savings", label: "Savings Goals", emoji: "💰", action: () => { setCurrentScreen("dashboard"); setActiveTab("savings"); setActiveSubScreen(null); } },
-                  { id: "loans", label: "Borrow / Loans", emoji: "🤝", action: () => { setCurrentScreen("dashboard"); setActiveTab("loans"); setActiveSubScreen(null); } },
-                  { id: "score", label: "Reputation Score", emoji: "📈", action: () => { setCurrentScreen("dashboard"); setActiveTab("score"); setActiveSubScreen(null); } },
-                  { id: "wallet", label: "My Wallet Workspace", emoji: "💼", action: () => { setActiveSubScreen("walletDetails"); } },
-                  { id: "transactions", label: "Transactions History", emoji: "🧾", action: () => { setActiveSubScreen("transactions"); } },
-                  { id: "announcements", label: "Announcements Feed", emoji: "📢", action: () => { setActiveSubScreen("announcementsFeed"); } },
-                  { id: "profile", label: "View Profile", emoji: "👤", action: () => { setActiveSubScreen("profile"); } },
-                  { id: "settings", label: "Settings", emoji: "⚙️", action: () => { setActiveSubScreen("appearanceSettings"); } },
-                ].map(item => (
-                  <TouchableOpacity
-                    key={item.id}
-                    onPress={() => {
-                      item.action();
-                      setIsDrawerOpen(false);
-                    }}
-                    style={{
-                      flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 12, paddingHorizontal: 10, borderRadius: 10
-                    }}
-                  >
-                    <Text style={{ fontSize: 18 }}>{item.emoji}</Text>
-                    <Text style={{ fontSize: 14, fontWeight: "600", color: themeTextColor }}>{item.label}</Text>
-                  </TouchableOpacity>
-                ))}
-
-                <TouchableOpacity
-                  onPress={() => {
-                    setIsDrawerOpen(false);
-                    Alert.alert(
-                      t("logout"),
-                      "Are you sure you want to log out of your PayLoop account?",
-                      [
-                        { text: t("cancel"), style: "cancel" },
-                        { text: t("logout"), style: "destructive", onPress: () => {
-                            setSelectedUser(null);
-                            setCurrentScreen("welcome");
-                            setActiveSubScreen(null);
-                          }
-                        }
-                      ]
-                    );
-                  }}
-                  style={{
-                    flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 12, paddingHorizontal: 10, borderRadius: 10, marginTop: 20
-                  }}
-                >
-                  <Text style={{ fontSize: 18 }}>🚪</Text>
-                  <Text style={{ fontSize: 14, fontWeight: "bold", color: "#E53935" }}>Logout</Text>
-                </TouchableOpacity>
-              </ScrollView>
-            </View>
-
-            <TouchableOpacity onPress={() => setIsDrawerOpen(false)} style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.5)" }} />
-          </View>
-        </Modal>
       )}
 
       {/* METAMASK TRANSACTION SIGNATURE OVERLAY */}

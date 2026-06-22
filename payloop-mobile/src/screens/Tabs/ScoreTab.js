@@ -16,7 +16,13 @@ export default function ScoreTab() {
   const {
     selectedUser,
     getCreditTier,
-    isDark
+    isDark,
+    themeBg,
+    themeCardBg,
+    themeBorderColor,
+    themeTextColor,
+    themeSubtitleColor,
+    themeDividerColor
   } = useApp();
 
   if (!selectedUser) return null;
@@ -97,21 +103,18 @@ export default function ScoreTab() {
   };
 
   return (
-    <ScrollView style={styles.tabContentLight} showsVerticalScrollIndicator={false}>
-      {/* Header */}
-      <View style={styles.subScreenHeader}>
-        <View style={{ width: 20 }} />
-        <Text style={styles.subScreenTitle}>CreditLoop Reputation</Text>
-        <View style={{ width: 20 }} />
-      </View>
-
+    <ScrollView 
+      style={[styles.tabContentLight, { backgroundColor: themeBg, paddingTop: 16 }]} 
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ paddingBottom: 120 }}
+    >
       {/* 1. CREDITLOOP SCORE CARD WITH CIRCULAR GAUGE */}
-      <View style={styles.scoreOverviewCard}>
+      <View style={[styles.scoreOverviewCard, { backgroundColor: themeCardBg, borderWidth: 1, borderColor: themeBorderColor }]}>
         <View style={styles.scoreCardContainerRow}>
           <View style={{ flex: 1 }}>
-            <Text style={styles.scoreCardTitle}>CreditLoop Score</Text>
-            <Text style={styles.scoreCardValue}>{score}</Text>
-            <Text style={styles.scoreCardMax}>out of 1000</Text>
+            <Text style={[styles.scoreCardTitle, { color: themeTextColor }]}>CreditLoop Score</Text>
+            <Text style={[styles.scoreCardValue, { color: themeTextColor }]}>{score}</Text>
+            <Text style={[styles.scoreCardMax, { color: themeSubtitleColor }]}>out of 1000</Text>
             <View style={[styles.scoreTierBadge, { backgroundColor: ratingColor + "15" }]}>
               <Text style={[styles.scoreTierBadgeText, { color: ratingColor }]}>
                 {ratingStatus}
@@ -153,8 +156,10 @@ export default function ScoreTab() {
       </View>
 
       {/* 2. PROGRESSION CHART (Score History) */}
-      <View style={styles.scoreHistoryCard}>
-        <Text style={styles.scoreHistoryCardTitle}>Score Progression (6 Months)</Text>
+      <View style={[styles.scoreHistoryCard, { backgroundColor: themeCardBg, borderWidth: 1, borderColor: themeBorderColor }]}>
+        <View style={{ borderLeftWidth: 4, borderLeftColor: "#3B82F6", paddingLeft: 8, marginBottom: 12 }}>
+          <Text style={[styles.scoreHistoryCardTitle, { color: themeTextColor, fontSize: 16, fontWeight: "800", marginBottom: 0 }]}>Score Progression (6 Months)</Text>
+        </View>
         <View style={styles.chartWrapperBox}>
           <Svg width="100%" height="130" viewBox="0 0 320 130">
             {/* Grid Lines */}
@@ -224,61 +229,65 @@ export default function ScoreTab() {
       </View>
 
       {/* 3. SCORE BREAKDOWN SECTION */}
-      <View style={styles.scoreBreakdownCard}>
-        <Text style={styles.scoreBreakdownHeader}>Score Factors Breakdown</Text>
+      <View style={[styles.scoreBreakdownCard, { backgroundColor: themeCardBg, borderWidth: 1, borderColor: themeBorderColor }]}>
+        <View style={{ borderLeftWidth: 4, borderLeftColor: "#0F9D58", paddingLeft: 8, marginBottom: 12 }}>
+          <Text style={[styles.scoreBreakdownHeader, { color: themeTextColor, fontSize: 16, fontWeight: "800", marginBottom: 0 }]}>Score Factors Breakdown</Text>
+        </View>
         
         <View style={styles.breakdownRowItemBox}>
           <View style={styles.breakdownItemHeaderRow}>
-            <Text style={styles.breakdownItemLabel}>Weekly Contribution Consistency</Text>
-            <Text style={styles.breakdownItemValue}>{contributionPoints} / 400 pts</Text>
+            <Text style={[styles.breakdownItemLabel, { color: themeTextColor }]}>Weekly Contribution Consistency</Text>
+            <Text style={[styles.breakdownItemValue, { color: themeSubtitleColor }]}>{contributionPoints} / 400 pts</Text>
           </View>
-          <View style={styles.breakdownProgressBarContainer}>
+          <View style={[styles.breakdownProgressBarContainer, { backgroundColor: isDark ? "#374151" : "#E5E7EB" }]}>
             <View style={[styles.breakdownProgressBarFill, { width: `${(contributionPoints / 400) * 100}%`, backgroundColor: ratingColor }]} />
           </View>
         </View>
 
         <View style={styles.breakdownRowItemBox}>
           <View style={styles.breakdownItemHeaderRow}>
-            <Text style={styles.breakdownItemLabel}>Loan Repayment Integrity</Text>
-            <Text style={styles.breakdownItemValue}>{repaymentPoints} / 250 pts</Text>
+            <Text style={[styles.breakdownItemLabel, { color: themeTextColor }]}>Loan Repayment Integrity</Text>
+            <Text style={[styles.breakdownItemValue, { color: themeSubtitleColor }]}>{repaymentPoints} / 250 pts</Text>
           </View>
-          <View style={styles.breakdownProgressBarContainer}>
+          <View style={[styles.breakdownProgressBarContainer, { backgroundColor: isDark ? "#374151" : "#E5E7EB" }]}>
             <View style={[styles.breakdownProgressBarFill, { width: `${(repaymentPoints / 250) * 100}%`, backgroundColor: ratingColor }]} />
           </View>
         </View>
 
         <View style={styles.breakdownRowItemBox}>
           <View style={styles.breakdownItemHeaderRow}>
-            <Text style={styles.breakdownItemLabel}>Chama Voting & Governance</Text>
-            <Text style={styles.breakdownItemValue}>{participationPoints} / 200 pts</Text>
+            <Text style={[styles.breakdownItemLabel, { color: themeTextColor }]}>Chama Voting & Governance</Text>
+            <Text style={[styles.breakdownItemValue, { color: themeSubtitleColor }]}>{participationPoints} / 200 pts</Text>
           </View>
-          <View style={styles.breakdownProgressBarContainer}>
+          <View style={[styles.breakdownProgressBarContainer, { backgroundColor: isDark ? "#374151" : "#E5E7EB" }]}>
             <View style={[styles.breakdownProgressBarFill, { width: `${(participationPoints / 200) * 100}%`, backgroundColor: ratingColor }]} />
           </View>
         </View>
 
         <View style={styles.breakdownRowItemBox}>
           <View style={styles.breakdownItemHeaderRow}>
-            <Text style={styles.breakdownItemLabel}>Savings Pool Growth Rate</Text>
-            <Text style={styles.breakdownItemValue}>{growthPoints} / 150 pts</Text>
+            <Text style={[styles.breakdownItemLabel, { color: themeTextColor }]}>Savings Pool Growth Rate</Text>
+            <Text style={[styles.breakdownItemValue, { color: themeSubtitleColor }]}>{growthPoints} / 150 pts</Text>
           </View>
-          <View style={styles.breakdownProgressBarContainer}>
+          <View style={[styles.breakdownProgressBarContainer, { backgroundColor: isDark ? "#374151" : "#E5E7EB" }]}>
             <View style={[styles.breakdownProgressBarFill, { width: `${(growthPoints / 150) * 100}%`, backgroundColor: ratingColor }]} />
           </View>
         </View>
       </View>
 
       {/* 4. ACHIEVEMENTS & MILESTONES */}
-      <View style={styles.achievementsSectionCard}>
-        <Text style={styles.achievementsSectionTitle}>Unlocked Badges & Milestones</Text>
+      <View style={[styles.achievementsSectionCard, { backgroundColor: themeCardBg, borderColor: themeBorderColor, borderWidth: 1 }]}>
+        <View style={{ borderLeftWidth: 4, borderLeftColor: "#8B5CF6", paddingLeft: 8, marginBottom: 12 }}>
+          <Text style={[styles.achievementsSectionTitle, { color: themeTextColor, fontSize: 16, fontWeight: "800", marginBottom: 0 }]}>Unlocked Badges & Milestones</Text>
+        </View>
         <View style={styles.achievementsGridRowContainer}>
           {achievements.map((ach) => (
-            <View key={ach.id} style={[styles.achievementCardBox, !ach.unlocked ? styles.achievementLockedCardBox : null]}>
-              <View style={[styles.achievementIconCircleWrapper, !ach.unlocked ? styles.achievementLockedIconCircle : null]}>
+            <View key={ach.id} style={[styles.achievementCardBox, { backgroundColor: themeCardBg, borderWidth: 1, borderColor: themeBorderColor }, !ach.unlocked ? styles.achievementLockedCardBox : null]}>
+              <View style={[styles.achievementIconCircleWrapper, { backgroundColor: isDark ? "rgba(139, 92, 246, 0.15)" : "#F3E8FF" }, !ach.unlocked ? styles.achievementLockedIconCircle : null]}>
                 <Text style={styles.achievementEmoji}>{ach.icon}</Text>
               </View>
-              <Text style={styles.achievementTitleText}>{ach.title}</Text>
-              <Text style={styles.achievementDescText}>{ach.desc}</Text>
+              <Text style={[styles.achievementTitleText, { color: themeTextColor }]}>{ach.title}</Text>
+              <Text style={[styles.achievementDescText, { color: themeSubtitleColor }]}>{ach.desc}</Text>
               {!ach.unlocked && <View style={styles.lockedBadgeOverlay}><Text style={styles.lockedBadgeIcon}>🔒</Text></View>}
             </View>
           ))}
@@ -286,44 +295,48 @@ export default function ScoreTab() {
       </View>
 
       {/* 5. BENEFITS SECTION */}
-      <View style={styles.benefitsContainerCard}>
-        <Text style={styles.benefitsSectionTitle}>Your CreditLoop Score Benefits</Text>
+      <View style={[styles.benefitsContainerCard, { backgroundColor: themeCardBg, borderWidth: 1, borderColor: themeBorderColor }]}>
+        <View style={{ borderLeftWidth: 4, borderLeftColor: "#F59E0B", paddingLeft: 8, marginBottom: 12 }}>
+          <Text style={[styles.benefitsSectionTitle, { color: themeTextColor, fontSize: 16, fontWeight: "800", marginBottom: 0 }]}>Your CreditLoop Score Benefits</Text>
+        </View>
         
-        <View style={[styles.benefitsTierListItem, score >= 800 ? styles.benefitsTierListItemActive : null]}>
+        <View style={[styles.benefitsTierListItem, score >= 800 ? styles.benefitsTierListItemActive : null, { borderColor: themeBorderColor }]}>
           <View style={styles.tierIndicatorCircle}><Text style={{fontSize: 10}}>💎</Text></View>
           <View style={{ flex: 1 }}>
-            <Text style={styles.tierNameLabel}>Platinum Tier (800+ Score)</Text>
-            <Text style={styles.tierBenefitsValue}>Up to 4.0x Chama Savings Loan • 5.0% Interest rate p.a. • Instant Auto-Approvals</Text>
+            <Text style={[styles.tierNameLabel, { color: themeTextColor }]}>Platinum Tier (800+ Score)</Text>
+            <Text style={[styles.tierBenefitsValue, { color: themeSubtitleColor }]}>Up to 4.0x Chama Savings Loan • 5.0% Interest rate p.a. • Instant Auto-Approvals</Text>
           </View>
           {score >= 800 && <Text style={styles.activeTierIndicatorLabel}>Active</Text>}
         </View>
 
-        <View style={[styles.benefitsTierListItem, (score >= 650 && score < 800) ? styles.benefitsTierListItemActive : null]}>
+        <View style={[styles.benefitsTierListItem, (score >= 650 && score < 800) ? styles.benefitsTierListItemActive : null, { borderColor: themeBorderColor }]}>
           <View style={styles.tierIndicatorCircle}><Text style={{fontSize: 10}}>⭐</Text></View>
           <View style={{ flex: 1 }}>
-            <Text style={styles.tierNameLabel}>Gold Tier (650 - 799 Score)</Text>
-            <Text style={styles.tierBenefitsValue}>Up to 3.0x Chama Savings Loan • 7.5% Interest rate p.a. • Priority voting rights</Text>
+            <Text style={[styles.tierNameLabel, { color: themeTextColor }]}>Gold Tier (650 - 799 Score)</Text>
+            <Text style={[styles.tierBenefitsValue, { color: themeSubtitleColor }]}>Up to 3.0x Chama Savings Loan • 7.5% Interest rate p.a. • Priority voting rights</Text>
           </View>
           {(score >= 650 && score < 800) && <Text style={styles.activeTierIndicatorLabel}>Active</Text>}
         </View>
 
-        <View style={[styles.benefitsTierListItem, (score >= 400 && score < 650) ? styles.benefitsTierListItemActive : null]}>
+        <View style={[styles.benefitsTierListItem, (score >= 400 && score < 650) ? styles.benefitsTierListItemActive : null, { borderColor: themeBorderColor }]}>
           <View style={styles.tierIndicatorCircle}><Text style={{fontSize: 10}}>🔘</Text></View>
           <View style={{ flex: 1 }}>
-            <Text style={styles.tierNameLabel}>Silver Tier (400 - 649 Score)</Text>
-            <Text style={styles.tierBenefitsValue}>Up to 2.0x Chama Savings Loan • 10% Interest rate p.a. • Standard voting consensus</Text>
+            <Text style={[styles.tierNameLabel, { color: themeTextColor }]}>Silver Tier (400 - 649 Score)</Text>
+            <Text style={[styles.tierBenefitsValue, { color: themeSubtitleColor }]}>Up to 2.0x Chama Savings Loan • 10% Interest rate p.a. • Standard voting consensus</Text>
           </View>
           {(score >= 400 && score < 650) && <Text style={styles.activeTierIndicatorLabel}>Active</Text>}
         </View>
       </View>
 
       {/* 6. IMPROVEMENT RECOMMENDATIONS */}
-      <View style={styles.recommendationsCardBox}>
-        <Text style={styles.recommendationsBoxTitle}>Personal Recommendations</Text>
+      <View style={[styles.recommendationsCardBox, { backgroundColor: isDark ? "rgba(15, 157, 88, 0.1)" : "#ECFDF5", borderColor: "rgba(15, 157, 88, 0.3)", borderWidth: 1 }]}>
+        <View style={{ borderLeftWidth: 4, borderLeftColor: "#10B981", paddingLeft: 8, marginBottom: 12 }}>
+          <Text style={[styles.recommendationsBoxTitle, { color: themeTextColor, fontSize: 16, fontWeight: "800", marginBottom: 0 }]}>Personal Recommendations</Text>
+        </View>
         
         <View style={styles.recommendationItemBox}>
           <Text style={styles.recommendationBullet}>💡</Text>
-          <Text style={styles.recommendationTextBody}>
+          <Text style={[styles.recommendationTextBody, { color: isDark ? "#A7F3D0" : "#065F46" }]}>
             Deposit your weekly KES 13,000 contribution before Friday to increase your Deposit Consistency score by <Text style={{fontWeight: "bold", color: "#0F9D58"}}>+5 pts</Text>.
           </Text>
         </View>
@@ -331,7 +344,7 @@ export default function ScoreTab() {
         {selectedUser.activeLoan > 0 && (
           <View style={styles.recommendationItemBox}>
             <Text style={styles.recommendationBullet}>💡</Text>
-            <Text style={styles.recommendationTextBody}>
+            <Text style={[styles.recommendationTextBody, { color: isDark ? "#A7F3D0" : "#065F46" }]}>
               Pay off your active business expansion loan ahead of schedule to claim the Reliable Borrower booster (<Text style={{fontWeight: "bold", color: "#0F9D58"}}>+25 pts</Text>).
             </Text>
           </View>
@@ -339,16 +352,18 @@ export default function ScoreTab() {
 
         <View style={styles.recommendationItemBox}>
           <Text style={styles.recommendationBullet}>💡</Text>
-          <Text style={styles.recommendationTextBody}>
+          <Text style={[styles.recommendationTextBody, { color: isDark ? "#A7F3D0" : "#065F46" }]}>
             Vote on active member loan request proposals. Participating in consensus signatures earns <Text style={{fontWeight: "bold", color: "#0F9D58"}}>+3 pts</Text> per broadcast vote.
           </Text>
         </View>
       </View>
 
       {/* 7. SHARE SCORE & CREDENTIAL VERIFICATION */}
-      <View style={styles.qrCodeScannerValidationCard}>
-        <Text style={styles.qrCodeScannerValidationCardTitle}>Reputation Verification</Text>
-        <View style={{ padding: 12, backgroundColor: "#ffffff", borderRadius: 12, borderWidth: 1, borderColor: "#E2E8F0" }}>
+      <View style={[styles.qrCodeScannerValidationCard, { backgroundColor: themeCardBg, borderWidth: 1, borderColor: themeBorderColor }]}>
+        <View style={{ borderLeftWidth: 4, borderLeftColor: "#3B82F6", paddingLeft: 8, marginBottom: 16 }}>
+          <Text style={[styles.qrCodeScannerValidationCardTitle, { color: themeTextColor, fontSize: 16, fontWeight: "800", marginBottom: 0 }]}>Reputation Verification</Text>
+        </View>
+        <View style={{ padding: 12, backgroundColor: "#ffffff", borderRadius: 12, borderWidth: 1, borderColor: "#E2E8F0", alignSelf: "center" }}>
           <QRCode
             value={`payloop:profile:${selectedUser.address}:${selectedUser.creditScore}`}
             size={130}
@@ -356,7 +371,7 @@ export default function ScoreTab() {
             backgroundColor="#ffffff"
           />
         </View>
-        <Text style={styles.qrCodeLabelText}>On-chain reputation address: {selectedUser.address.substring(0, 16)}...</Text>
+        <Text style={[styles.qrCodeLabelText, { color: themeSubtitleColor, textAlign: "center", marginTop: 12 }]}>On-chain reputation address: {selectedUser.address.substring(0, 16)}...</Text>
         
         <View style={styles.scoreVerificationBtnRow}>
           <TouchableOpacity onPress={handleShareScore} style={styles.scoreShareOutlineBtn}>
@@ -372,29 +387,31 @@ export default function ScoreTab() {
       </View>
 
       {/* 8. RECENT SCORE ACTIVITIES */}
-      <View style={styles.activitiesContainerCard}>
-        <Text style={styles.activitiesSectionTitle}>Recent Score Activities</Text>
+      <View style={[styles.activitiesContainerCard, { backgroundColor: themeCardBg, borderWidth: 1, borderColor: themeBorderColor }]}>
+        <View style={{ borderLeftWidth: 4, borderLeftColor: "#EC4899", paddingLeft: 8, marginBottom: 16 }}>
+          <Text style={[styles.activitiesSectionTitle, { color: themeTextColor, fontSize: 16, fontWeight: "800", marginBottom: 0 }]}>Recent Score Activities</Text>
+        </View>
         
-        <View style={styles.activityRowLogItem}>
+        <View style={[styles.activityRowLogItem, { borderBottomColor: themeBorderColor }]}>
           <View style={styles.activityLeftPart}>
-            <Text style={styles.activityDateLabel}>8 Jun 2026</Text>
-            <Text style={styles.activityLogText}>Voted YES on Peter Mwangi's Loan Request</Text>
+            <Text style={[styles.activityDateLabel, { color: themeSubtitleColor }]}>8 Jun 2026</Text>
+            <Text style={[styles.activityLogText, { color: themeTextColor }]}>Voted YES on Peter Mwangi's Loan Request</Text>
           </View>
           <Text style={styles.activityPointsEarnedGreen}>+3 pts</Text>
         </View>
 
-        <View style={styles.activityRowLogItem}>
+        <View style={[styles.activityRowLogItem, { borderBottomColor: themeBorderColor }]}>
           <View style={styles.activityLeftPart}>
-            <Text style={styles.activityDateLabel}>4 Jun 2026</Text>
-            <Text style={styles.activityLogText}>Weekly Chama Vault deposit completed</Text>
+            <Text style={[styles.activityDateLabel, { color: themeSubtitleColor }]}>4 Jun 2026</Text>
+            <Text style={[styles.activityLogText, { color: themeTextColor }]}>Weekly Chama Vault deposit completed</Text>
           </View>
           <Text style={styles.activityPointsEarnedGreen}>+5 pts</Text>
         </View>
 
-        <View style={styles.activityRowLogItem}>
+        <View style={[styles.activityRowLogItem, { borderBottomWidth: 0 }]}>
           <View style={styles.activityLeftPart}>
-            <Text style={styles.activityDateLabel}>28 May 2026</Text>
-            <Text style={styles.activityLogText}>Repaid principal for Education Loan ID #2 early</Text>
+            <Text style={[styles.activityDateLabel, { color: themeSubtitleColor }]}>28 May 2026</Text>
+            <Text style={[styles.activityLogText, { color: themeTextColor }]}>Repaid principal for Education Loan ID #2 early</Text>
           </View>
           <Text style={styles.activityPointsEarnedGreen}>+15 pts</Text>
         </View>
